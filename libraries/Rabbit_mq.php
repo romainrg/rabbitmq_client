@@ -89,24 +89,19 @@ class Rabbit_mq {
         if(!empty($queue)) {
             $this->channel->queue_declare($queue, false, false, false, false);
 
-            // define consuming
+            // Define consuming
             $this->channel->basic_consume('hello', '', false, true, false, false, array($this, 'process'));
-
-            // TEMPORAIRE
-            // $callback = function($msg) {
-            //     return 'Message reçu : ' . $msg->body;
-            // };
-
-            // var_dump($this->channel->basic_consume('hello', '', false, true, false, false, $callback));
-
         } else {
             show_error('You did not specify the <b>queue</b> parameter', NULL, 'RabbitMQ Library Error');
         }
     }
 
+    /**
+     * [process : Process return]
+     * @return [string]
+     */
     public function process($message) {
-        var_dump($message);
-        echo 'lol';
+        return 'Message received : ' . $message->body;
     }
 
     /**
