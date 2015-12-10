@@ -61,7 +61,7 @@ $this->load->library('rabbit_mq');
 $this->load->remove_package_path(APPPATH . 'third_party/rabbitmq');
 ```
 
-### Step 6 : Enjoy ;)
+### Step 6 : Enjoy and give me some improvements or ideas ! ;)
 
 ## Examples
 
@@ -73,12 +73,38 @@ This will create, if it does not exist, the **'hello_queue'** queue and insert *
 $this->rabbit_mq->push('hello_queue', 'Hello World !');
 ```
 
-#### 2 - Fetching some datas from a Queue:
+If you want to run your CI Controller Method with CLI command :
 
-This will fetch last inserted datas from the **'hello_queue'** with limit of **100** results.
+```sh
+$ php www.mywebsite.com/index.php 'controller' 'method'
+```
+
+*You will have the following return*
+
+```sh
+$ [+] Pushing 'Hello World !' to 'hello_queue' -> OK
+```
+
+#### 2 - Fetching some datas from a Queue **(only in CLI at this time)**:
+
+This will fetch last inserted datas from the **'hello_queue'** in real time.
+
+The PHP Code :
+```php
+return $this->rabbit_mq->pull('hello_queue');
+```
+
+Run it in CLI :
+```sh
+$ php www.mywebsite.com/index.php 'controller' 'method'
+```
+
+#### 3 - Pushing some datas in a Queue with additional parameters:
+
+This will create, if it does not exist, the **'hello_queue'** queue and insert **'Hello World !'** text inside it, the third parameter **TRUE** set the durability of the **'hello_queue'** (TRUE = permanent, FALSE = not permanent), the last parameter **'delivery_mode (2)'** makes message persistent (you can also add some  parameters to this array).
 
 ```php
-$this->rabbit_mq->pull('hello_queue', 100);
+$this->rabbit_mq->push('hello_queue', 'Hello World !', TRUE, array('delivery_mode' => 2));
 ```
 
 ## License

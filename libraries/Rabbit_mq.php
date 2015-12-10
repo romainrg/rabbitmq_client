@@ -48,20 +48,26 @@ class Rabbit_mq {
             $this->connexion = new PhpAmqpLib\Connection\AMQPStreamConnection($this->config['host'], $this->config['port'], $this->config['user'], $this->config['pass']);
             $this->channel = $this->connexion->channel();
         } else {
-            show_error('Invalid configuration file', NULL, 'RabbitMQ Library Error');
+            if($this->CI->input->is_cli_request()) {
+                echo '[x] RabbitMQ Library Error : Invalid configuration file' . PHP_EOL;
+            } else {
+                show_error('Invalid configuration file', NULL, 'RabbitMQ Library Error');
+            }
         }
     }
 
     /**
      * [push : Push an element in the specified queue]
-     * @param  [string]          $queue [Specified queue]
-     * @param  [string OR array] $data  [Datas]
+     * @param  [string]          $queue     [Specified queue]
+     * @param  [string OR array] $data      [Datas]
+     * @param  [bool]            $permanent [Permanent mode of the queue]
+     * @param  [array]           $params    [Additional parameters]
      * @return [bool]
      */
-    public function push($queue = NULL, $data = NULL, $params = array()) {
+    public function push($queue = NULL, $data = NULL, $permanent = FALSE, $params = array()) {
         // We check if the queue is not empty then we declare the queue
         if(!empty($queue)) {
-            $this->channel->queue_declare($queue, false, false, false, false);
+            $this->channel->queue_declare($queue, FALSE, $permanent, FALSE, FALSE);
 
             // If the informations given are in an array, we convert it in json format
             if(is_array($data)) {
@@ -72,36 +78,52 @@ class Rabbit_mq {
             $item = new PhpAmqpLib\Message\AMQPMessage($data, $params);
             $this->channel->basic_publish($item, '', $queue);
 
-            return $item->body;
+            echo '[+] Pushing "'.$item->body.'" to "'.$queue.'" queue -> OK' . PHP_EOL;
         } else {
-            show_error('You did not specify the <b>queue</b> parameter', NULL, 'RabbitMQ Library Error');
+            if($this->CI->input->is_cli_request()) {
+                echo '[x] RabbitMQ Library Error : You did not specify the [queue] parameter' . PHP_EOL;
+            } else {
+                show_error('You did not specify the <b>queue</b> parameter', NULL, 'RabbitMQ Library Error');
+            }
         }
     }
 
     /**
-     * [pull : Get the items from the specified queue]
-     * @param  [string]  $queue [Specified queue]
-     * @param  [int]     $limit [Limit of results]
-     * @return [array]          [Results]
+     * [pull : Get the items from the specified queue] (Must be executed with CLI command at this time)
+     * @param  [string]  $queue     [Specified queue]
+     * @param  [bool]    $permanent [Permanent mode of the queue]
      */
-    public function pull($queue = NULL, $limit = 1000) {
+    public function pull($queue = NULL, $permanent = FALSE) {
         // We check if the queue is not empty then we declare the queue
         if(!empty($queue)) {
-            $this->channel->queue_declare($queue, false, false, false, false);
+            // Declaring the queue again
+            $this->channel->queue_declare($queue, FALSE, $permanent, FALSE, FALSE);
 
-            // Define consuming
-            $this->channel->basic_consume('hello', '', false, true, false, false, array($this, 'process'));
+            // Define the start message for CLI command
+            echo '[*] Waiting for instructions, press CTRL + C to abort.' . PHP_EOL;
+
+            // Define consuming with 'process' callback
+            $this->channel->basic_consume($queue, FALSE, FALSE, TRUE, FALSE, FALSE, array($this, '_process'));
+
+            // Continue the process of CLI command, waiting for others instructions
+            while (count($this->channel->callbacks)) {
+                $this->channel->wait();
+            }
         } else {
-            show_error('You did not specify the <b>queue</b> parameter', NULL, 'RabbitMQ Library Error');
+            if($this->CI->input->is_cli_request()) {
+                echo '[x] RabbitMQ Library Error : You did not specify the [queue] parameter' . PHP_EOL;
+            } else {
+                show_error('You did not specify the <b>queue</b> parameter', NULL, 'RabbitMQ Library Error');
+            }
         }
     }
 
     /**
-     * [process : Process return]
-     * @return [string]
-     */
-    public function process($message) {
-        return 'Message received : ' . $message->body;
+    * [process : Process function while pull function fetch some items]
+    * @param  [object] $message [Message object]
+    */
+    public function _process($message) {
+        echo '[>] Getting instructions : ' . $message->body . PHP_EOL;
     }
 
     /**
@@ -122,8 +144,12 @@ class Rabbit_mq {
      * [__destruct : Close the channel and the connection]
      */
     public function __destruct() {
-        $this->channel->close();
-        $this->connexion->close();
+        if(!empty($this->channel)) {
+            $this->channel->close();
+        }
+        if(!empty($this->connexion)) {
+            $this->connexion->close();
+        }
     }
 }
 
