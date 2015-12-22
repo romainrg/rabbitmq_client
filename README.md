@@ -44,10 +44,11 @@ The config file is located in the directory `./application/third_party/rabbimq/c
  * Config for Rabbit MQ Library
  */
 $config['rabbitmq'] = array(
-    'host' => 'localhost',    <- Your Host (default: localhost)
-    'port' => 5672,           <- Your Port (default)
-    'user' => 'username',     <- Your User (default: guest)
-    'pass' => 'password'      <- Your Password (default: guest)
+    'host' => 'localhost',    <- Your Host     (default: localhost)
+    'port' => 5672,           <- Your Port     (default: 5672)
+    'user' => 'username',     <- Your User     (default: guest)
+    'pass' => 'password',     <- Your Password (default: guest)
+    'vhost' => '/'            <- Your Vhost    (default: /)
 );
 ```
 
