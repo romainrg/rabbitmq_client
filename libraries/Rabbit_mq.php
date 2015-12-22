@@ -30,6 +30,9 @@ class Rabbit_mq {
         // Load the CI instance
         $this->CI = & get_instance();
 
+        // Load the RabbitMQ helper
+        $this->CI->load->helper('rabbitmq');
+
         // Load the RabbitMQ config then load the config as item
         $this->CI->config->load('rabbitmq');
         $this->config = $this->CI->config->item('rabbitmq');
@@ -48,11 +51,7 @@ class Rabbit_mq {
             $this->connexion = new PhpAmqpLib\Connection\AMQPStreamConnection($this->config['host'], $this->config['port'], $this->config['user'], $this->config['pass'], $this->config['vhost']);
             $this->channel = $this->connexion->channel();
         } else {
-            if($this->CI->input->is_cli_request()) {
-                echo '[x] RabbitMQ Library Error : Invalid configuration file' . PHP_EOL;
-            } else {
-                show_error('Invalid configuration file', NULL, 'RabbitMQ Library Error');
-            }
+            output_message('Invalid configuration file', 'error', 'x');
         }
     }
 
@@ -78,13 +77,10 @@ class Rabbit_mq {
             $item = new PhpAmqpLib\Message\AMQPMessage($data, $params);
             $this->channel->basic_publish($item, '', $queue);
 
-            echo '[+] Pushing "'.$item->body.'" to "'.$queue.'" queue -> OK' . PHP_EOL;
+            // Output
+            output_message('Pushing "'.$item->body.'" to "'.$queue.'" queue -> OK', NULL, '+');
         } else {
-            if($this->CI->input->is_cli_request()) {
-                echo '[x] RabbitMQ Library Error : You did not specify the [queue] parameter' . PHP_EOL;
-            } else {
-                show_error('You did not specify the <b>queue</b> parameter', NULL, 'RabbitMQ Library Error');
-            }
+            output_message('You did not specify the [queue] parameter', 'error', 'x');
         }
     }
 
@@ -99,8 +95,8 @@ class Rabbit_mq {
             // Declaring the queue again
             $this->channel->queue_declare($queue, FALSE, $permanent, FALSE, FALSE);
 
-            // Define the start message for CLI command
-            echo '[*] Waiting for instructions, press CTRL + C to abort.' . PHP_EOL;
+            // Define the start message
+            output_message('Waiting for instructions, press CTRL + C to abort', NULL, '*');
 
             // Define consuming with 'process' callback
             $this->channel->basic_consume($queue, FALSE, FALSE, TRUE, FALSE, FALSE, array($this, '_process'));
@@ -110,11 +106,7 @@ class Rabbit_mq {
                 $this->channel->wait();
             }
         } else {
-            if($this->CI->input->is_cli_request()) {
-                echo '[x] RabbitMQ Library Error : You did not specify the [queue] parameter' . PHP_EOL;
-            } else {
-                show_error('You did not specify the <b>queue</b> parameter', NULL, 'RabbitMQ Library Error');
-            }
+            output_message('You did not specify the [queue] parameter', 'error', 'x');
         }
     }
 
@@ -123,7 +115,7 @@ class Rabbit_mq {
     * @param  [object] $message [Message object]
     */
     public function _process($message) {
-        echo '[>] Getting instructions : ' . $message->body . PHP_EOL;
+        output_message('Queue message : ' . $message->body, NULL, '>');
     }
 
     /**
