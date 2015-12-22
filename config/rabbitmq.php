@@ -8,5 +8,6 @@ $config['rabbitmq'] = array(
     'host' => 'localhost',
     'port' => 5672,
     'user' => 'username',
-    'pass' => 'password'
+    'pass' => 'password',
+    'vhost' => '/'
 );

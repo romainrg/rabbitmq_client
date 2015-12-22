@@ -45,7 +45,7 @@ class Rabbit_mq {
     public function initialize($config = array()) {
         // We check if we have a config given then we initialize the connection
         if(!empty($config)) {
-            $this->connexion = new PhpAmqpLib\Connection\AMQPStreamConnection($this->config['host'], $this->config['port'], $this->config['user'], $this->config['pass']);
+            $this->connexion = new PhpAmqpLib\Connection\AMQPStreamConnection($this->config['host'], $this->config['port'], $this->config['user'], $this->config['pass'], $this->config['vhost']);
             $this->channel = $this->connexion->channel();
         } else {
             if($this->CI->input->is_cli_request()) {
