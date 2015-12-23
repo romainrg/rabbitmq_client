@@ -13,7 +13,7 @@
         }
     ],
     "require": {
-        "videlalvaro/php-amqplib": "2.5.*"
+        "romainrg/codeigniter-php-amqplib": "2.6.*"
     },
     "extra": {
         "installer-name": "rabbitmq"
