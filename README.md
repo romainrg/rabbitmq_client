@@ -15,7 +15,7 @@
 
 ```json
 "require": {
-    "romainrg/codeigniter-rabbitmq-library": "1.0.*"
+    "romainrg/codeigniter-rabbitmq-library": "2.0.*"
 },
 ```
 
@@ -88,11 +88,11 @@ $ [+] Pushing 'Hello World !' to 'hello_queue' -> OK
 
 #### 2 - Fetching some datas from a Queue **(only in CLI at this time)**:
 
-This will fetch last inserted datas from the **'hello_queue'** in real time.
+This will fetch last inserted datas from the **'hello_queue'** in real time, with parmanent mode activated and **'_process'** callback function.
 
 The PHP Code :
 ```php
-return $this->rabbit_mq->pull('hello_queue');
+return $this->rabbit_mq->pull('hello_queue', true, array($this, '_process'));
 ```
 
 Run it in CLI :
