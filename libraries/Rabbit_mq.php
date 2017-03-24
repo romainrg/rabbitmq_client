@@ -4,10 +4,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * @package   CodeIgniter RabbitMQ Library
  * @category  Libraries
- * @author    Romain GALLIEN
+ * @author    Romain GALLIEN (romaingallien.rg@gmail.com)
  * @license   http://opensource.org/licenses/MIT > MIT License
  * @link      https://github.com/romainrg
- * @link      http://www.r-gallien.eu/
  *
  * CodeIgniter Library for RabbitMQ interactions with CodeIgniter using PHP-AMQPLib
  */
@@ -22,11 +21,16 @@ class Rabbit_mq {
     // Default public vars
     public $connexion;
     public $channel;
+    public $show_output;
 
     /**
-     * [__construct : Construct]
+     * __construct : Constructor
+     * @method __construct
+     * @author Romain GALLIEN <romaingallien.rg@gmail.com>
+     * @param  array       $params Params
      */
-    public function __construct() {
+    public function __construct(array $params = array())
+    {
         // Load the CI instance
         $this->CI = & get_instance();
 
@@ -37,15 +41,21 @@ class Rabbit_mq {
         $this->CI->config->load('rabbitmq');
         $this->config = $this->CI->config->item('rabbitmq');
 
+        // Define if we have to show outputs or not
+        $this->show_output = (!empty($params['show_output']));
+
         // Initialize the connection
-        self::initialize($this->config);
+        $this->initialize($this->config);
     }
 
     /**
-     * [initialize : Initialize the configuration of the Library]
-     * @param  [array]  $config Library configuration
+     * initialize : Initialize the configuration of the Library
+     * @method initialize
+     * @author Romain GALLIEN <romaingallien.rg@gmail.com>
+     * @param  array      $config Library configuration
      */
-    public function initialize($config = array()) {
+    public function initialize($config = array())
+    {
         // We check if we have a config given then we initialize the connection
         if(!empty($config)) {
             $this->connexion = new PhpAmqpLib\Connection\AMQPStreamConnection($this->config['host'], $this->config['port'], $this->config['user'], $this->config['pass'], $this->config['vhost']);
@@ -56,17 +66,21 @@ class Rabbit_mq {
     }
 
     /**
-     * [push : Push an element in the specified queue]
-     * @param  [string]          $queue     [Specified queue]
-     * @param  [string OR array] $data      [Datas]
-     * @param  [bool]            $permanent [Permanent mode of the queue]
-     * @param  [array]           $params    [Additional parameters]
-     * @return [bool]
+     * push : Push an element in the specified queue
+     * @method push
+     * @author Romain GALLIEN <romaingallien.rg@gmail.com>
+     * @param  string  $queue                   Specified queue
+     * @param  mixed(string/array)  $data       Datas
+     * @param  boolean $permanent               Permanent mode of the queue
+     * @param  array   $params                  Additional parameters
+     * @return bool
      */
-    public function push($queue = NULL, $data = NULL, $permanent = FALSE, $params = array()) {
+    public function push($queue = null, $data = null, $permanent = false, $params = array())
+    {
         // We check if the queue is not empty then we declare the queue
         if(!empty($queue)) {
-            $this->channel->queue_declare($queue, FALSE, $permanent, FALSE, FALSE);
+
+            $this->channel->queue_declare($queue, false, $permanent, false, false);
 
             // If the informations given are in an array, we convert it in json format
             if(is_array($data)) {
@@ -78,28 +92,30 @@ class Rabbit_mq {
             $this->channel->basic_publish($item, '', $queue);
 
             // Output
-            output_message('Pushing "'.$item->body.'" to "'.$queue.'" queue -> OK', NULL, '+');
+            ($this->show_output) ? output_message('Pushing "'.$item->body.'" to "'.$queue.'" queue -> OK', null, '+') : true;
         } else {
             output_message('You did not specify the [queue] parameter', 'error', 'x');
         }
     }
 
     /**
-     * [pull : Get the items from the specified queue] (Must be executed with CLI command at this time)
-     * @param  [string]  $queue     [Specified queue]
-     * @param  [bool]    $permanent [Permanent mode of the queue]
+     * pull : Get the items from the specified queue (Must be executed with CLI command at this time)
+     * @method pull
+     * @author Romain GALLIEN <romaingallien.rg@gmail.com>
+     * @param  string  $queue     Specified queue
+     * @param  bool    $permanent Permanent mode of the queue
+     * @param  array   $callback  Callback
      */
-    public function pull($queue = NULL, $permanent = FALSE) {
+    public function pull($queue = null, $permanent = false, array $callback = array())
+    {
         // We check if the queue is not empty then we declare the queue
         if(!empty($queue)) {
-            // Declaring the queue again
-            $this->channel->queue_declare($queue, FALSE, $permanent, FALSE, FALSE);
 
-            // Define the start message
-            output_message('Waiting for instructions, press CTRL + C to abort', NULL, '*');
+            // Declaring the queue again
+            $this->channel->queue_declare($queue, false, $permanent, false, false);
 
             // Define consuming with 'process' callback
-            $this->channel->basic_consume($queue, FALSE, FALSE, TRUE, FALSE, FALSE, array($this, '_process'));
+            $this->channel->basic_consume($queue, false, false, true, false, false, $callback);
 
             // Continue the process of CLI command, waiting for others instructions
             while (count($this->channel->callbacks)) {
@@ -111,34 +127,39 @@ class Rabbit_mq {
     }
 
     /**
-    * [process : Process function while pull function fetch some items]
-    * @param  [object] $message [Message object]
-    */
-    public function _process($message) {
-        output_message('Queue message : ' . $message->body, NULL, '>');
+     * move : Move a message from a queue to another one
+     * @method move
+     * @author Romain GALLIEN <romaingallien.rg@gmail.com>
+     */
+    public function move()
+    {
+        show_error('This method does not exist', null, 'RabbitMQ Library Error');
     }
 
     /**
-     * [move : Move a message from a queue to another one]
+     * purge : Delete everything in the selected queue
+     * @method purge
+     * @author Romain GALLIEN <romaingallien.rg@gmail.com>
+     * @param  string  $queue
      */
-    public function move() {
-        show_error('This method does not exist', NULL, 'RabbitMQ Library Error');
+    public function purge($queue = null)
+    {
+        show_error('This method does not exist', null, 'RabbitMQ Library Error');
     }
 
     /**
-     * [purge : Delete everything in the selected queue]
+     * __destruct : Close the channel and the connection
+     * @method __destruct
+     * @author Romain GALLIEN <romaingallien.rg@gmail.com>
      */
-    public function purge($queue = NULL) {
-        show_error('This method does not exist', NULL, 'RabbitMQ Library Error');
-    }
-
-    /**
-     * [__destruct : Close the channel and the connection]
-     */
-    public function __destruct() {
+    public function __destruct()
+    {
+        // Close the channel
         if(!empty($this->channel)) {
             $this->channel->close();
         }
+
+        // Close the connexion
         if(!empty($this->connexion)) {
             $this->connexion->close();
         }
