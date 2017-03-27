@@ -40,6 +40,9 @@ class Rabbitmq {
         // Define if we have to show outputs or not
         $this->show_output = (!empty($config['show_output']));
 
+        // Define the config global
+        $this->config = (!empty($config)) ? $config : array();
+
         // Initialize the connection
         $this->initialize($this->config);
     }
