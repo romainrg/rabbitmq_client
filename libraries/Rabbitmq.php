@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  *
  * CodeIgniter Library for RabbitMQ interactions with CodeIgniter using PHP-AMQPLib
  */
-class Rabbit_mq {
+class Rabbitmq {
 
     // Default private vars
     private $CI;
@@ -27,9 +27,9 @@ class Rabbit_mq {
      * __construct : Constructor
      * @method __construct
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
-     * @param  array       $params Params
+     * @param  array       $config Configuration
      */
-    public function __construct(array $params = array())
+    public function __construct(array $config = array())
     {
         // Load the CI instance
         $this->CI = & get_instance();
@@ -37,12 +37,8 @@ class Rabbit_mq {
         // Load the RabbitMQ helper
         $this->CI->load->helper('rabbitmq');
 
-        // Load the RabbitMQ config then load the config as item
-        $this->CI->config->load('rabbitmq');
-        $this->config = $this->CI->config->item('rabbitmq');
-
         // Define if we have to show outputs or not
-        $this->show_output = (!empty($params['show_output']));
+        $this->show_output = (!empty($config['show_output']));
 
         // Initialize the connection
         $this->initialize($this->config);
@@ -54,10 +50,11 @@ class Rabbit_mq {
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
      * @param  array      $config Library configuration
      */
-    public function initialize($config = array())
+    public function initialize(array $config = array())
     {
         // We check if we have a config given then we initialize the connection
         if(!empty($config)) {
+            $this->config = $config;
             $this->connexion = new PhpAmqpLib\Connection\AMQPStreamConnection($this->config['host'], $this->config['port'], $this->config['user'], $this->config['pass'], $this->config['vhost']);
             $this->channel = $this->connexion->channel();
         } else {
@@ -166,5 +163,5 @@ class Rabbit_mq {
     }
 }
 
-/* End of file Rabbit_mq.php */
-/* Location: ./application/librairies/Rabbit_mq.php */
+/* End of file Rabbitmq.php */
+/* Location: ./application/librairies/Rabbitmq.php */

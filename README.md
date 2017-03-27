@@ -15,7 +15,7 @@
 
 ```json
 "require": {
-    "romainrg/codeigniter-rabbitmq-library": "2.0.*"
+    "romainrg/codeigniter-rabbitmq-library": "3.0.*"
 },
 ```
 
@@ -32,37 +32,30 @@ You have to create it in the CI config folder located in `./application/config/r
 ```php
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-require(APPPATH . '/third_party/rabbitmq/config/rabbitmq.php');
-```
 
-### Step 4 : Edit the config file
-
-The config file is located in the directory `./application/third_party/rabbimq/config/rabbitmq.php`
-
-```php
 /**
  * Config for Rabbit MQ Library
  */
 $config['rabbitmq'] = array(
-    'host' => 'localhost',    <- Your Host     (default: localhost)
-    'port' => 5672,           <- Your Port     (default: 5672)
-    'user' => 'username',     <- Your User     (default: guest)
-    'pass' => 'password',     <- Your Password (default: guest)
-    'vhost' => '/'            <- Your Vhost    (default: /)
+    'host' => 'localhost',    // <- Your Host     (default: localhost)
+    'port' => 5672,           // <- Your Port     (default: 5672)
+    'user' => 'username',     // <- Your User     (default: guest)
+    'pass' => 'password',     // <- Your Password (default: guest)
+    'vhost' => '/'            // <- Your Vhost    (default: /)
 );
 ```
 
-### Step 5 : Load the library in your CI Core Controller file
+### Step 4 : Load the library in your CI Core Controller file
 
 (Or just in a CI Controller)
 
 ```php
 $this->load->add_package_path(APPPATH . 'third_party/rabbitmq');
-$this->load->library('rabbit_mq');
+$this->load->library('rabbitmq');
 $this->load->remove_package_path(APPPATH . 'third_party/rabbitmq');
 ```
 
-### Step 6 : Enjoy and give me some improvements or ideas ! ;)
+### Step 5 : Enjoy and give me some improvements or ideas ! ;)
 
 ## Examples
 
@@ -71,7 +64,7 @@ $this->load->remove_package_path(APPPATH . 'third_party/rabbitmq');
 This will create, if it does not exist, the **'hello_queue'** queue and insert **'Hello World !'** text inside it.
 
 ```php
-$this->rabbit_mq->push('hello_queue', 'Hello World !');
+$this->rabbitmq->push('hello_queue', 'Hello World !');
 ```
 
 If you want to run your CI Controller Method with CLI command :
@@ -92,7 +85,7 @@ This will fetch last inserted datas from the **'hello_queue'** in real time, wit
 
 The PHP Code :
 ```php
-return $this->rabbit_mq->pull('hello_queue', true, array($this, '_process'));
+return $this->rabbitmq->pull('hello_queue', true, array($this, '_process'));
 ```
 
 Run it in CLI :
@@ -105,7 +98,7 @@ $ php www.mywebsite.com/index.php 'controller' 'method'
 This will create, if it does not exist, the **'hello_queue'** queue and insert **'Hello World !'** text inside it, the third parameter **TRUE** set the durability of the **'hello_queue'** (TRUE = permanent, FALSE = not permanent), the last parameter **'delivery_mode (2)'** makes message persistent (you can also add some  parameters to this array).
 
 ```php
-$this->rabbit_mq->push('hello_queue', 'Hello World !', TRUE, array('delivery_mode' => 2));
+$this->rabbitmq->push('hello_queue', 'Hello World !', TRUE, array('delivery_mode' => 2));
 ```
 
 ## License

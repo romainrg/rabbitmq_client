@@ -11,7 +11,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  *
  * CodeIgniter Helper for RabbitMQ library
  */
-if (!function_exists('output_message')) {
+if (!function_exists('output_message'))
+{
 
     /**
      * [output_message : Output defined message in Browser or Console]
@@ -19,8 +20,8 @@ if (!function_exists('output_message')) {
      * @param  [string] $type    [Output message]
      * @return [type]            [description]
      */
-    function output_message($message, $type = NULL, $symbol = '>') {
-
+    function output_message($message, $type = NULL, $symbol = '>')
+    {
         if(get_instance()->input->is_cli_request()) {
             switch ($type) {
                 case 'error':
