@@ -15,7 +15,7 @@
             "name": "Stéphane Lucien-Vauthier",
             "email": "s.lucien_vauthier@santiane.fr",
             "role": "WEB/PHP Developer"
-        },
+        }
     ],
     "require": {
         "romainrg/codeigniter-php-amqplib": "2.6.*"
