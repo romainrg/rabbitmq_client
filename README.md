@@ -15,7 +15,7 @@
 
 ```json
 "require": {
-    "romainrg/codeigniter-rabbitmq-library": "3.0.*"
+    "romainrg/codeigniter-rabbitmq-library": "4.0.*"
 },
 ```
 

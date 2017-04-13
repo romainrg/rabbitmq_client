@@ -80,15 +80,16 @@ class Rabbitmq {
         // We check if the queue is not empty then we declare the queue
         if(!empty($queue)) {
 
-            $this->channel->queue_declare($queue, false, $permanent, false, false);
+            // We declare the queue
+            $this->channel->queue_declare($queue, false, $permanent, false, false, false, null, null);
 
             // If the informations given are in an array, we convert it in json format
-            if(is_array($data)) {
-                $data = json_encode($data);
-            }
+            $data = (is_array($data)) ? json_encode($data) : $data;
 
             // Create a new instance of message then push it into the selected queue
             $item = new PhpAmqpLib\Message\AMQPMessage($data, $params);
+
+            // Publish to the queue
             $this->channel->basic_publish($item, '', $queue);
 
             // Output
@@ -112,10 +113,13 @@ class Rabbitmq {
         if(!empty($queue)) {
 
             // Declaring the queue again
-            $this->channel->queue_declare($queue, false, $permanent, false, false);
+            $this->channel->queue_declare($queue, false, $permanent, false, false, false, null, null);
+
+            // Limit the number of unacknowledged
+            $this->channel->basic_qos(null, 1, null);
 
             // Define consuming with 'process' callback
-            $this->channel->basic_consume($queue, false, false, true, false, false, $callback);
+            $this->channel->basic_consume($queue, '', false, false, false, false, $callback);
 
             // Continue the process of CLI command, waiting for others instructions
             while (count($this->channel->callbacks)) {
@@ -124,6 +128,26 @@ class Rabbitmq {
         } else {
             output_message('You did not specify the [queue] parameter', 'error', 'x');
         }
+    }
+
+    /**
+     * Lock a message
+     * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     * @param AMQPMessage $message
+     */
+    public function lock($message)
+    {
+        $this->channel->basic_reject($message->delivery_info['delivery_tag'], true);
+    }
+
+    /**
+     * Release a message
+     * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     * @param AMQPMessage $msg
+     */
+    public function unlock($message)
+    {
+        $this->channel->basic_ack($message->delivery_info['delivery_tag']);
     }
 
     /**
