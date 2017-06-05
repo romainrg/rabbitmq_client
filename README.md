@@ -5,8 +5,8 @@
 ## Dependencies
 
 - Rabbit MQ Installed on your server (at least 3.5.*)
-- [php-amqplib](https://github.com/videlalvaro/php-amqplib)
-- CodeIgniter Framework (3.0.* recommanded)
+- [php-amqplib](https://github.com/php-amqplib/php-amqplib)
+- CodeIgniter Framework (3.* recommanded)
 - PHP 5.4+ (with Composer)
 
 ## Installation
@@ -15,14 +15,14 @@
 
 ```json
 "require": {
-    "romainrg/codeigniter-rabbitmq-library": "4.0.*"
+    "santiane/rabbitmq_client": "5.*"
 },
 ```
 
 ### Step 2 : Run a composer update in the directory of your project with the following command :
 
 ```sh
-$ composer require romainrg/codeigniter-rabbitmq-library
+$ composer require santiane/rabbitmq_client
 ```
 
 ### Step 3 : Create the following config file
@@ -36,7 +36,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * Config for Rabbit MQ Library
  */
-$config['rabbitmq'] = array(
+$config['rabbitmq_client'] = array(
     'host' => 'localhost',    // <- Your Host     (default: localhost)
     'port' => 5672,           // <- Your Port     (default: 5672)
     'user' => 'username',     // <- Your User     (default: guest)
@@ -50,9 +50,9 @@ $config['rabbitmq'] = array(
 (Or just in a CI Controller)
 
 ```php
-$this->load->add_package_path(APPPATH . 'third_party/rabbitmq');
-$this->load->library('rabbitmq');
-$this->load->remove_package_path(APPPATH . 'third_party/rabbitmq');
+$this->load->add_package_path(FCPATH.'vendor/santiane/rabbitmq_client');
+$this->load->library('rabbitmq_client');
+$this->load->remove_package_path(FCPATH.'vendor/santiane/rabbitmq_client');
 ```
 
 ### Step 5 : Enjoy and give me some improvements or ideas ! ;)
@@ -64,7 +64,7 @@ $this->load->remove_package_path(APPPATH . 'third_party/rabbitmq');
 This will create, if it does not exist, the **'hello_queue'** queue and insert **'Hello World !'** text inside it.
 
 ```php
-$this->rabbitmq->push('hello_queue', 'Hello World !');
+$this->rabbitmq_client->push('hello_queue', 'Hello World !');
 ```
 
 If you want to run your CI Controller Method with CLI command :
@@ -85,7 +85,7 @@ This will fetch last inserted datas from the **'hello_queue'** in real time, wit
 
 The PHP Code :
 ```php
-return $this->rabbitmq->pull('hello_queue', true, array($this, '_process'));
+return $this->rabbitmq_client->pull('hello_queue', true, array($this, '_process'));
 ```
 
 Run it in CLI :
@@ -98,7 +98,7 @@ $ php www.mywebsite.com/index.php 'controller' 'method'
 This will create, if it does not exist, the **'hello_queue'** queue and insert **'Hello World !'** text inside it, the third parameter **TRUE** set the durability of the **'hello_queue'** (TRUE = permanent, FALSE = not permanent), the last parameter **'delivery_mode (2)'** makes message persistent (you can also add some  parameters to this array).
 
 ```php
-$this->rabbitmq->push('hello_queue', 'Hello World !', TRUE, array('delivery_mode' => 2));
+$this->rabbitmq_client->push('hello_queue', 'Hello World !', TRUE, array('delivery_mode' => 2));
 ```
 
 ## License

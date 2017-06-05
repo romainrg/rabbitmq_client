@@ -1,10 +1,9 @@
 {
-    "name": "romainrg/codeigniter-rabbitmq-library",
+    "name": "santiane/rabbitmq_client",
     "keywords": ["library", "codeigniter", "rabbitmq"],
     "description": "CodeIgniter Library for RabbitMQ interactions with CodeIgniter using PHP-AMQPLib",
-    "homepage": "https://github.com/romainrg/codeigniter-rabbitmq-library.git",
+    "homepage": "https://git.santiane.io/library/rabbitmq_client.git",
     "license": "MIT License",
-    "type": "codeigniter-third-party",
     "authors": [
         {
             "name": "Romain Gallien",
@@ -15,12 +14,15 @@
             "name": "Stéphane Lucien-Vauthier",
             "email": "s.lucien_vauthier@santiane.fr",
             "role": "WEB/PHP Developer"
+        },
+        {
+            "name": "Yoann Vanitou ",
+            "email": "y.vanitou@santiane.fr",
+            "role": "WEB/PHP Developer"
         }
     ],
     "require": {
-        "romainrg/codeigniter-php-amqplib": "2.6.*"
-    },
-    "extra": {
-        "installer-name": "rabbitmq"
+        "php": ">=5.4.0",
+        "php-amqplib/php-amqplib": "^2.6.2"
     }
 }

@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  *
  * CodeIgniter Library for RabbitMQ interactions with CodeIgniter using PHP-AMQPLib
  */
-class Rabbitmq {
+class Rabbitmq_client {
 
     // Default private vars
     private $CI;
@@ -32,10 +32,10 @@ class Rabbitmq {
     public function __construct(array $config = array())
     {
         // Load the CI instance
-        $this->CI = & get_instance();
+        $this->CI =& get_instance();
 
         // Load the RabbitMQ helper
-        $this->CI->load->helper('rabbitmq');
+        $this->CI->load->helper('rabbitmq_client');
 
         // Define if we have to show outputs or not
         $this->show_output = (!empty($config['show_output']));
@@ -57,7 +57,7 @@ class Rabbitmq {
     {
         // We check if we have a config given then we initialize the connection
         if(!empty($config)) {
-            $this->config = $config['rabbitmq'];
+            $this->config = $config['rabbitmq_client'];
             $this->connexion = new PhpAmqpLib\Connection\AMQPStreamConnection($this->config['host'], $this->config['port'], $this->config['user'], $this->config['pass'], $this->config['vhost']);
             $this->channel = $this->connexion->channel();
         } else {
@@ -190,5 +190,5 @@ class Rabbitmq {
     }
 }
 
-/* End of file Rabbitmq.php */
-/* Location: ./application/librairies/Rabbitmq.php */
+/* End of file Rabbitmq_client.php */
+/* Location: ./application/librairies/Rabbitmq_client.php */
