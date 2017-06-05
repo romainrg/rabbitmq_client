@@ -6,12 +6,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @category  Helpers
  * @author    Romain GALLIEN
  * @license   http://opensource.org/licenses/MIT > MIT License
- * @link      https://github.com/romainrg
+ * @link      https://git.santiane.io/library/rabbitmq_client
  * @link      http://www.r-gallien.eu/
  *
  * CodeIgniter Helper for RabbitMQ library
  */
-if (!function_exists('output_message'))
+if (!function_exists('rabbitmq_client_output'))
 {
 
     /**
@@ -20,7 +20,7 @@ if (!function_exists('output_message'))
      * @param  [string] $type    [Output message]
      * @return [type]            [description]
      */
-    function output_message($message, $type = NULL, $symbol = '>')
+    function rabbitmq_client_output($message, $type = NULL, $symbol = '>')
     {
         if(get_instance()->input->is_cli_request()) {
             switch ($type) {

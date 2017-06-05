@@ -6,7 +6,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @category  Libraries
  * @author    Romain GALLIEN (romaingallien.rg@gmail.com)
  * @license   http://opensource.org/licenses/MIT > MIT License
- * @link      https://github.com/romainrg
+ * @link      https://git.santiane.io/library/rabbitmq_client
  *
  * CodeIgniter Library for RabbitMQ interactions with CodeIgniter using PHP-AMQPLib
  */
@@ -61,7 +61,7 @@ class Rabbitmq_client {
             $this->connexion = new PhpAmqpLib\Connection\AMQPStreamConnection($this->config['host'], $this->config['port'], $this->config['user'], $this->config['pass'], $this->config['vhost']);
             $this->channel = $this->connexion->channel();
         } else {
-            output_message('Invalid configuration file', 'error', 'x');
+            rabbitmq_client_output('Invalid configuration file', 'error', 'x');
         }
     }
 
@@ -93,9 +93,9 @@ class Rabbitmq_client {
             $this->channel->basic_publish($item, '', $queue);
 
             // Output
-            ($this->show_output) ? output_message('Pushing "'.$item->body.'" to "'.$queue.'" queue -> OK', null, '+') : true;
+            ($this->show_output) ? rabbitmq_client_output('Pushing "'.$item->body.'" to "'.$queue.'" queue -> OK', null, '+') : true;
         } else {
-            output_message('You did not specify the [queue] parameter', 'error', 'x');
+            rabbitmq_client_output('You did not specify the [queue] parameter', 'error', 'x');
         }
     }
 
@@ -126,7 +126,7 @@ class Rabbitmq_client {
                 $this->channel->wait();
             }
         } else {
-            output_message('You did not specify the [queue] parameter', 'error', 'x');
+            rabbitmq_client_output('You did not specify the [queue] parameter', 'error', 'x');
         }
     }
 
