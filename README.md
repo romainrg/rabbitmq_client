@@ -103,4 +103,4 @@ $this->rabbitmq_client->push('hello_queue', 'Hello World !', TRUE, array('delive
 
 ## License
 
-[MIT License](http://opensource.org/licenses/MIT)
+[MIT License](https://git.santiane.io/library/rabbitmq_client/blob/master/LICENSE)
