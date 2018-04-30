@@ -69,11 +69,12 @@ class Rabbitmq_client {
      * push : Push an element in the specified queue
      * @method push
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
-     * @param  string  $queue                   Specified queue
+     * @param  string $queue Specified queue
      * @param  mixed(string/array)  $data       Datas
-     * @param  boolean $permanent               Permanent mode of the queue
-     * @param  array   $params                  Additional parameters
+     * @param  boolean $permanent Permanent mode of the queue
+     * @param  array $params Additional parameters
      * @return bool
+     * @throws Exception
      */
     public function push($queue = null, $data = null, $permanent = false, $params = array())
     {
@@ -96,6 +97,7 @@ class Rabbitmq_client {
             ($this->show_output) ? rabbitmq_client_output('Pushing "'.$item->body.'" to "'.$queue.'" queue -> OK', null, '+') : true;
         } else {
             rabbitmq_client_output('You did not specify the [queue] parameter', 'error', 'x');
+            throw new Exception("You did not specify the [queue] parameter");
         }
     }
 
@@ -103,11 +105,12 @@ class Rabbitmq_client {
      * pull : Get the items from the specified queue (Must be executed with CLI command at this time)
      * @method pull
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
-     * @param  string  $queue     Specified queue
-     * @param  bool    $permanent Permanent mode of the queue
-     * @param  array   $callback  Callback
+     * @param  string $queue Specified queue
+     * @param  bool $permanent Permanent mode of the queue
+     * @param  array $callback Callback
+     * @throws Exception
      */
-    public function pull($queue = null, $permanent = false, array $callback = array())
+    public function pull($queue = null, $permanent = false, $callback = array())
     {
         // We check if the queue is not empty then we declare the queue
         if(!empty($queue)) {
@@ -127,23 +130,24 @@ class Rabbitmq_client {
             }
         } else {
             rabbitmq_client_output('You did not specify the [queue] parameter', 'error', 'x');
+            throw new Exception("You did not specify the [queue] parameter");
         }
     }
 
     /**
-     * Lock a message
+     * lock a message
      * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
      * @param AMQPMessage $message
      */
     public function lock($message)
     {
-        $this->channel->basic_reject($message->delivery_info['delivery_tag'], true);
+        $this->channel->basic_nack($message->delivery_info['delivery_tag'], false, true);
     }
 
     /**
      * Release a message
      * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
-     * @param AMQPMessage $msg
+     * @param AMQPMessage $message
      */
     public function unlock($message)
     {
