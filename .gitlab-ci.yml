@@ -21,8 +21,7 @@ test-unitary:
         - cp composer.json test
         - ls -l $PWD
         - ls -l $PWD/test
-        - docker run --rm --tty --volume "$PWD/test":/app --workdir /app composer:1.4 ls -l > result_test.html
-        #- docker run --rm --tty --volume $PWD/test:/app --workdir /app composer:1.4 install --ignore-platform-reqs --no-scripts --no-progress
+        - docker run --rm --tty --volume $PWD/test:/app --workdir /app composer:1.4 install --ignore-platform-reqs --no-scripts --no-progress
         #- cp -r test/vendor/codeigniter/framework/* test
         #- mkdir test/vendor/santiane/rabbitmq_client
         #- cp -r libraries test/vendor/santiane/rabbitmq_client
