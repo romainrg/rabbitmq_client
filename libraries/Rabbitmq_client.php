@@ -135,7 +135,7 @@ class Rabbitmq_client {
     }
 
     /**
-     * lock a message
+     * Lock a message
      * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
      * @param AMQPMessage $message
      */
