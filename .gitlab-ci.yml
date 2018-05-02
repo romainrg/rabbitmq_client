@@ -25,6 +25,8 @@ test-unitary:
         - cp -r config test/application
         - cp -r tests test/application
         - docker run --rm --tty -e CI_ENV=testing --volume $PWD/test:/app --workdir /app php:7.1 php index.php unity runComplete
+        - ls -l
+        - ls -l test
     artifacts:
         when: on_failure
         paths: [test/result_test.html]
