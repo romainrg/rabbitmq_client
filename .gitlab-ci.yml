@@ -14,6 +14,7 @@ test-unitary:
          #- docker run --rm --name rabbitmq -d -p 5672:5672 -p 15672:15672 rabbitmq:3.6-management
          - mkdir test
          - cp -v composer.json test
+         - cp -rv ci test
          - docker run --rm --tty --volume $PWD:/app --workdir /app/test composer:1.4 install --ignore-platform-reqs --no-scripts --no-progress
          - cp -r test/vendor/codeigniter/framework/* test
          - sed -i 's~$config\[\x27composer_autoload\x27\] = FALSE;~$config\[\x27composer_autoload\x27\] = FCPATH.\x27vendor/autoload.php\x27;~' test/application/config/config.php
