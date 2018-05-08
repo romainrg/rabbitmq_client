@@ -18,7 +18,7 @@ test-unitary:
          - cp -rv ci test
          - docker run --rm --tty --volume $PWD:/app --workdir /app/test composer:1.4 install --ignore-platform-reqs --no-scripts --no-progress
          - cp -r test/vendor/codeigniter/framework/* test
-         - sed -i 's~$config\[\x27composer_autoload\x27\] = FALSE;~$config['composer_autoload'] = FCPATH.'vendor/autoload.php';~' test/application/config/config.php
+         - sed -i 's~$config\[\x27composer_autoload\x27\] = FALSE;~$config["'"composer_autoload"'"] = FCPATH."'"vendor/autoload.php"'";~' test/application/config/config.php
          - cat test/application/config/config.php
          #- mkdir -p test/vendor/santiane/rabbitmq_client
          #- cp -r libraries test/vendor/santiane/rabbitmq_client
