@@ -24,7 +24,7 @@ test-unitary:
          - cp controllers/Unity.php test/application/controllers
          - cp -r config test/application
          - cp -r tests test/application
-         - docker run --rm --tty -e CI_ENV=testing --volume $PWD:/app --workdir /app/test php:7.1 php index.php unity runComplete
+         - docker run --rm --tty -e CI_ENV=testing --volume $PWD:/app --workdir /app/test php:7.1 php /app/test/index.php unity runComplete
          - ls -l
          - ls -l test
     artifacts:
