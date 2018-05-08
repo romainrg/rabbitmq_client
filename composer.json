@@ -28,7 +28,7 @@
     }
   ],
   "require-dev": {
-    "santiane/unity": "~2.2"
+    "santiane/unity": "2.2.4"
   },
     "require": {
       "codeigniter/framework": "~3.1",
