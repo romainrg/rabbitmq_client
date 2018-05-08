@@ -6,6 +6,7 @@ stages:
 before_script:
     - find . -type d -exec chmod 755 {} +
     - find . -type f -exec chmod 644 {} +
+    - find ./ci -type f -exec chmod 755 {} +
 
 test-unitary:
     stage: test
