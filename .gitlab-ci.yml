@@ -29,7 +29,7 @@ test-unitary:
          - ls -l test
     artifacts:
         when: on_failure
-        paths: [test/result_test.html]
+        paths: [result_test.html]
 
     only:
         - testing
