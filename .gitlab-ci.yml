@@ -12,24 +12,25 @@ test-unitary:
     stage: test
     environment: testing
     script:
+         - docker ps -a
          - docker rm -v 6c9b93e079cc
-         - docker run --rm --name rabbitmq -d -p 5672:5672 -p 15672:15672 rabbitmq:3.6-management
-         - mkdir test
-         - cp -v composer.json test
-         - cp -rv ci test
-         - docker run --rm --tty --volume $PWD:/app --workdir /app/test composer:1.4 install --ignore-platform-reqs --no-scripts --no-progress
-         - cp -r test/vendor/codeigniter/framework/* test
-         - sed -i 's~$config\[\x27composer_autoload\x27\] = FALSE;~$config["composer_autoload"] = FCPATH."vendor/autoload.php";~' test/application/config/config.php
-         - mkdir -p test/vendor/santiane/rabbitmq_client
-         - cp -r libraries test/vendor/santiane/rabbitmq_client
-         - cp -r config test/vendor/santiane/rabbitmq_client
-         - cp -r helpers test/vendor/santiane/rabbitmq_client
-         - cp -r tests test/vendor/santiane/rabbitmq_client
-         - cp controllers/Unity.php test/application/controllers
-         - cp -r config test/application
-         - cp -r tests test/application
-         - docker run --rm --tty -e CI_ENV=testing --entrypoint="ci/docker_entrypoint_php.sh" --volume $PWD:/app --workdir /app/test php:7.1 php /app/test/index.php unity runComplete
-         - docker stop rabbitmq
+         #- docker run --rm --name rabbitmq -d -p 5672:5672 -p 15672:15672 rabbitmq:3.6-management
+         #- mkdir test
+         #- cp -v composer.json test
+         #- cp -rv ci test
+         #- docker run --rm --tty --volume $PWD:/app --workdir /app/test composer:1.4 install --ignore-platform-reqs --no-scripts --no-progress
+         #- cp -r test/vendor/codeigniter/framework/* test
+         #- sed -i 's~$config\[\x27composer_autoload\x27\] = FALSE;~$config["composer_autoload"] = FCPATH."vendor/autoload.php";~' test/application/config/config.php
+         #- mkdir -p test/vendor/santiane/rabbitmq_client
+         #- cp -r libraries test/vendor/santiane/rabbitmq_client
+         #- cp -r config test/vendor/santiane/rabbitmq_client
+         #- cp -r helpers test/vendor/santiane/rabbitmq_client
+         #- cp -r tests test/vendor/santiane/rabbitmq_client
+         #- cp controllers/Unity.php test/application/controllers
+         #- cp -r config test/application
+         #- cp -r tests test/application
+         #- docker run --rm --tty -e CI_ENV=testing --entrypoint="ci/docker_entrypoint_php.sh" --volume $PWD:/app --workdir /app/test php:7.1 php /app/test/index.php unity runComplete
+         #- docker stop rabbitmq
     artifacts:
         when: on_failure
         paths: [test/result_test.html]
