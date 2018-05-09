@@ -28,7 +28,8 @@ test-unitary:
          #- cp -r config test/application
          #- cp -r tests test/application
          #- docker run --rm --tty -e CI_ENV=testing --entrypoint="ci/docker_entrypoint_php.sh" --volume $PWD:/app --workdir /app/test php:7.1 php /app/test/index.php unity runComplete
-         - docker stop rabbitmq
+         - docker ps
+         #- docker stop rabbitmq
     artifacts:
         when: on_failure
         paths: [test/result_test.html]
