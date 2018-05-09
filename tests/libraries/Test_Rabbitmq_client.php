@@ -24,9 +24,9 @@ class Test_Rabbitmq_client extends TestCase
         $this->stressTest = false;
         parent::__construct();
 
-        $this->CI->load->add_package_path(RABBITMQ_PATH)
+        $this->CI->load->add_package_path(RABBITMQ_CLIENT_PATH)
             ->library('rabbitmq_client')
-            ->remove_package_path(RABBITMQ_PATH);
+            ->remove_package_path(RABBITMQ_CLIENT_PATH);
     }
 
     /**
@@ -123,5 +123,25 @@ class Test_Rabbitmq_client extends TestCase
         $this->unitTest($msg->id, self::$idMessage);
         $message->delivery_info['channel']->basic_cancel($message->delivery_info['consumer_tag']);
         self::$idMessage++;
+    }
+
+    public function move()
+    {
+        try {
+            $this->CI->rabbitmq_client->move();
+            $this->unitTest(2, 1);
+        } catch (Exception $e) {
+            $this->unitTest(1, 1);
+        }
+    }
+
+    public function purge()
+    {
+        try {
+            $this->CI->rabbitmq_client->purge();
+            $this->unitTest(2, 1);
+        } catch (Exception $e) {
+            $this->unitTest(1, 1);
+        }
     }
 }
