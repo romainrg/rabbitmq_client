@@ -33,7 +33,6 @@ test-unitary:
         - cp -r tests test/application
         - docker run --rm --tty -e CI_ENV=testing --entrypoint="ci/docker_entrypoint_php.sh" --volume $PWD:/app --workdir /app/test php:7.1 php /app/test/index.php unity runComplete
     after_script:
-        - docker ps --format '{{.Names}}' | grep "^/rabbitmq" | awk '{print $1}' | xargs -I {} docker stop {} | xargs -I {} docker rm -v {}
         - docker ps --format '{{.Names}}' | grep "^rabbitmq" | awk '{print $1}' | xargs -I {} docker stop {} | xargs -I {} docker rm -v {}
         - docker ps -a
     artifacts:
