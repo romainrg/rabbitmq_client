@@ -6,7 +6,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 $config['rabbitmq_client'] = array(
     'host' => '172.17.0.1',
-    'port' => 5672,
+    'port' => 5673,
     'user' => 'guest',
     'pass' => 'guest',
     'vhost' => '/'
