@@ -158,10 +158,11 @@ class Rabbitmq_client {
      * move : Move a message from a queue to another one
      * @method move
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
+     * @throws
      */
     public function move()
     {
-        show_error('This method does not exist', null, 'RabbitMQ Library Error');
+        throw new Exception("This method does not exist");
     }
 
     /**
@@ -169,10 +170,11 @@ class Rabbitmq_client {
      * @method purge
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
      * @param  string  $queue
+     * @throws
      */
     public function purge($queue = null)
     {
-        show_error('This method does not exist', null, 'RabbitMQ Library Error');
+        throw new Exception("This method does not exist");
     }
 
     /**

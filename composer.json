@@ -21,7 +21,17 @@
             "role": "WEB/PHP Developer"
         }
     ],
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://composer:sLaGBuABBA5Fxm4xb873RtuHCZ3yar@git.santiane.io/library/unity.git"
+    }
+  ],
+  "require-dev": {
+    "santiane/unity": "2.2.4"
+  },
     "require": {
+      "codeigniter/framework": "~3.1",
         "php": ">=5.4.0",
         "php-amqplib/php-amqplib": "^2.6.2"
     }
