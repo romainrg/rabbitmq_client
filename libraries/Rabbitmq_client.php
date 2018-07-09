@@ -18,8 +18,14 @@ class Rabbitmq_client {
     // Default protected vars
     protected $config;
 
-    // Default public vars
+    /**
+     * @var PhpAmqpLib\Connection\AMQPStreamConnection
+     */
     public $connexion;
+
+    /**
+     * @var PhpAmqpLib\Channel\AMQPChannel
+     */
     public $channel;
     public $show_output;
 
@@ -73,7 +79,6 @@ class Rabbitmq_client {
      * @param  mixed(string/array)  $data       Datas
      * @param  boolean $permanent Permanent mode of the queue
      * @param  array $params Additional parameters
-     * @return bool
      * @throws Exception
      */
     public function push($queue = null, $data = null, $permanent = false, $params = array())
@@ -108,9 +113,10 @@ class Rabbitmq_client {
      * @param  string $queue Specified queue
      * @param  bool $permanent Permanent mode of the queue
      * @param  array $callback Callback
+     * @param  array $params params to push the message in the queue after an exception not caught by the application
      * @throws Exception
      */
-    public function pull($queue = null, $permanent = false, $callback = array())
+    public function pull($queue = null, $permanent = false, $callback = array(), $params = array())
     {
         // We check if the queue is not empty then we declare the queue
         if(!empty($queue)) {
@@ -122,7 +128,19 @@ class Rabbitmq_client {
             $this->channel->basic_qos(null, 1, null);
 
             // Define consuming with 'process' callback
-            $this->channel->basic_consume($queue, '', false, false, false, false, $callback);
+            $this->channel->basic_consume($queue, '', false, false, false, false, function ($message) use ($callback, $queue, $permanent, $params) {
+                try {
+                    $callback($message);
+                } catch (Exception $e) {
+                    error_log($e->getMessage());
+                    $this->unlock($message);
+                    $this->push($queue, json_encode(json_decode($message->body)), $permanent, $params);
+                } catch (Throwable $t) {
+                    error_log($t->getMessage());
+                    $this->unlock($message);
+                    $this->push($queue, json_encode(json_decode($message->body)), $permanent, $params);
+                }
+            });
 
             // Continue the process of CLI command, waiting for others instructions
             while (count($this->channel->callbacks)) {
@@ -137,7 +155,7 @@ class Rabbitmq_client {
     /**
      * Lock a message
      * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
-     * @param AMQPMessage $message
+     * @param PhpAmqpLib\Message\AMQPMessage $message
      */
     public function lock($message)
     {
@@ -147,7 +165,7 @@ class Rabbitmq_client {
     /**
      * Release a message
      * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
-     * @param AMQPMessage $message
+     * @param PhpAmqpLib\Message\AMQPMessage $message
      */
     public function unlock($message)
     {
@@ -158,10 +176,11 @@ class Rabbitmq_client {
      * move : Move a message from a queue to another one
      * @method move
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
+     * @throws
      */
     public function move()
     {
-        show_error('This method does not exist', null, 'RabbitMQ Library Error');
+        throw new Exception("This method does not exist");
     }
 
     /**
@@ -169,10 +188,11 @@ class Rabbitmq_client {
      * @method purge
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
      * @param  string  $queue
+     * @throws
      */
     public function purge($queue = null)
     {
-        show_error('This method does not exist', null, 'RabbitMQ Library Error');
+        $this->channel->queue_purge($queue);
     }
 
     /**

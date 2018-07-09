@@ -18,7 +18,7 @@ if (!function_exists('rabbitmq_client_output'))
      * [output_message : Output defined message in Browser or Console]
      * @param  [string] $message [Output message]
      * @param  [string] $type    [Output message]
-     * @return [type]            [description]
+     * @param  string $symbol
      */
     function rabbitmq_client_output($message, $type = NULL, $symbol = '>')
     {
@@ -35,7 +35,7 @@ if (!function_exists('rabbitmq_client_output'))
         } else {
             switch ($type) {
                 case 'error':
-                show_error($message, NULL, 'RabbitMQ Library Error');
+                    show_error($message, NULL, 'RabbitMQ Library Error');
                 break;
 
                 default:

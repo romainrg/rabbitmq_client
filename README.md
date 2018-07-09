@@ -14,9 +14,11 @@
 ### Step 1 : Add the following line to your composer.json file
 
 ```json
-"require": {
-    "santiane/rabbitmq_client": "5.*"
-},
+{
+  "require": {
+      "santiane/rabbitmq_client": "5.*"
+  }
+}
 ```
 
 ### Step 2 : Run a composer update in the directory of your project with the following command :
