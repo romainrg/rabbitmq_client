@@ -2,9 +2,9 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * @package   CodeIgniter RabbitMQ Library
+ * CodeIgniter RabbitMQ Library
+ * @package   Rabbitmq_client
  * @category  Libraries
- * @author    Romain GALLIEN (romaingallien.rg@gmail.com)
  * @license   http://opensource.org/licenses/MIT > MIT License
  * @link      https://git.santiane.io/library/rabbitmq_client
  *
@@ -12,28 +12,43 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class Rabbitmq_client {
 
-    // Default private vars
+    /**
+     * CI_Controller instance
+     * @var CI_Controller
+     */
     private $CI;
 
-    // Default protected vars
+    /**
+     * Configuration of the rabbitmq connexion
+     * @var array
+     */
     protected $config;
 
     /**
+     * Rabbitmq connexion
      * @var PhpAmqpLib\Connection\AMQPStreamConnection
      */
     public $connexion;
 
     /**
+     * Rabbitmq queue management
      * @var PhpAmqpLib\Channel\AMQPChannel
      */
     public $channel;
+
+    /**
+     * Write message into the output stream
+     * @var bool
+     */
     public $show_output;
 
     /**
-     * __construct : Constructor
-     * @method __construct
+     * Constructor
+     *
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
-     * @param  array       $config Configuration
+     * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     *
+     * @param  array $config Overrided Configuration at startup
      */
     public function __construct(array $config = array())
     {
@@ -54,10 +69,12 @@ class Rabbitmq_client {
     }
 
     /**
-     * initialize : Initialize the configuration of the Library
-     * @method initialize
+     * Initialize the configuration of the Library
+     *
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
-     * @param  array      $config Library configuration
+     * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     *
+     * @param  array $config Overrided Configuration at runtime
      */
     public function initialize(array $config = array())
     {
@@ -72,11 +89,13 @@ class Rabbitmq_client {
     }
 
     /**
-     * push : Push an element in the specified queue
-     * @method push
+     * Push an element in the specified queue
+     *
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
+     * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+
      * @param  string $queue Specified queue
-     * @param  mixed(string/array)  $data       Datas
+     * @param  mixed(string/array)  $data Data to push
      * @param  boolean $permanent Permanent mode of the queue
      * @param  array $params Additional parameters
      * @throws Exception
@@ -107,12 +126,14 @@ class Rabbitmq_client {
     }
 
     /**
-     * pull : Get the items from the specified queue (Must be executed with CLI command at this time)
-     * @method pull
+     * Get the items from the specified queue
+     *
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
+     * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     *
      * @param  string $queue Specified queue
      * @param  bool $permanent Permanent mode of the queue
-     * @param  array $callback Callback
+     * @param  array $callback Callback to treat the data
      * @param  array $params params to push the message in the queue after an exception not caught by the application
      * @throws Exception
      */
@@ -130,6 +151,7 @@ class Rabbitmq_client {
             // Define consuming with 'process' callback
             $this->channel->basic_consume($queue, '', false, false, false, false, function ($message) use ($callback, $queue, $permanent, $params) {
                 try {
+                    // Call application treatment
                     $callback($message);
                 } catch (Exception $e) {
                     error_log($e->getMessage());
@@ -154,7 +176,9 @@ class Rabbitmq_client {
 
     /**
      * Lock a message
+     *
      * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     *
      * @param PhpAmqpLib\Message\AMQPMessage $message
      */
     public function lock($message)
@@ -164,7 +188,9 @@ class Rabbitmq_client {
 
     /**
      * Release a message
+     *
      * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     *
      * @param PhpAmqpLib\Message\AMQPMessage $message
      */
     public function unlock($message)
@@ -173,9 +199,10 @@ class Rabbitmq_client {
     }
 
     /**
-     * move : Move a message from a queue to another one
-     * @method move
+     * Move a message from a queue to another one
+     *
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
+     *
      * @throws
      */
     public function move()
@@ -184,10 +211,12 @@ class Rabbitmq_client {
     }
 
     /**
-     * purge : Delete everything in the selected queue
-     * @method purge
+     * Delete everything in the selected queue
+     *
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
-     * @param  string  $queue
+     * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     *
+     * @param  string  $queue to purge
      * @throws
      */
     public function purge($queue = null)
@@ -196,8 +225,8 @@ class Rabbitmq_client {
     }
 
     /**
-     * __destruct : Close the channel and the connection
-     * @method __destruct
+     * Close the channel and the connection
+     *
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
      */
     public function __destruct()

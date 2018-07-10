@@ -5,7 +5,7 @@
 
 set -xe
 
-# Install extention
+# Install extension
 docker-php-ext-install -j$(nproc) bcmath
 
 exec "$@"

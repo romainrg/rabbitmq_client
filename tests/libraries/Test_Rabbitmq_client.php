@@ -17,6 +17,7 @@ class Test_Rabbitmq_client extends TestCase
 
     /**
      * Constructor
+     *
      * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
      */
     public function __construct()
@@ -32,7 +33,9 @@ class Test_Rabbitmq_client extends TestCase
 
     /**
      * Reset data before each test
+     *
      * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     *
      * @param bool $hasData if true, insert data to queue
      * @throws Exception
      */
@@ -50,7 +53,9 @@ class Test_Rabbitmq_client extends TestCase
 
     /**
      * Test push to rabbitmq
+     *
      * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     *
      * @throws Exception
      */
     public function push()
@@ -66,7 +71,9 @@ class Test_Rabbitmq_client extends TestCase
 
     /**
      * Test pull with exception
+     *
      * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     *
      * @throws Exception
      */
     public function pullWithException()
@@ -91,7 +98,9 @@ class Test_Rabbitmq_client extends TestCase
 
     /**
      * Test pull with lock
+     *
      * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     *
      * @throws Exception
      */
     public function pullWithLock()
@@ -111,7 +120,9 @@ class Test_Rabbitmq_client extends TestCase
 
     /**
      * Test pull with unlock
+     *
      * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     *
      * @throws Exception
      */
     public function pullWithAck()
@@ -138,7 +149,9 @@ class Test_Rabbitmq_client extends TestCase
 
     /**
      * Test pull without lock and unlock
+     *
      * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     *
      * @throws Exception
      */
     public function pull()
@@ -163,7 +176,9 @@ class Test_Rabbitmq_client extends TestCase
 
     /**
      * Test to move message in another queue
+     *
      * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     *
      * @throws Exception
      */
     public function move()
@@ -179,7 +194,9 @@ class Test_Rabbitmq_client extends TestCase
 
     /**
      * Test to purge queue
+     *
      * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     *
      * @throws Exception
      */
     public function purge()
