@@ -24,23 +24,24 @@ if (!function_exists('rabbitmq_client_output'))
         if(get_instance()->input->is_cli_request()) {
             switch ($type) {
                 case 'error':
-                echo '[x] RabbitMQ Library Error : '.$message . PHP_EOL;
-                break;
+                    echo '[x] RabbitMQ Library Error : ' . $message . PHP_EOL;
+                    break;
 
                 default:
-                echo '['.$symbol.'] '.$message . PHP_EOL;
-                break;
+                    echo '[' . $symbol . '] ' . $message . PHP_EOL;
+                    break;
             }
-        } else {
-            switch ($type) {
-                case 'error':
-                    show_error($message, NULL, 'RabbitMQ Library Error');
-                break;
+            return;
+        }
 
-                default:
-                echo $message . '<br>';
-                break;
-            }
+        switch ($type) {
+            case 'error':
+                show_error($message, NULL, 'RabbitMQ Library Error');
+            break;
+
+            default:
+            echo $message . '<br>';
+            break;
         }
     }
 }
