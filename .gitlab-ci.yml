@@ -8,8 +8,6 @@ before_script:
     - find . -type f -exec chmod 644 {} +
     - find ./ci -type f -exec chmod 755 {} +
 
-docker run --rm --tty --volume "rabbitmq_client":/code --volume /var/run/docker.sock:/var/run/docker.sock --volume /tmp/cc:/tmp/cc --env CODECLIMATE_CODE="rabbitmq_client" --env CONTAINER_TIMEOUT_SECONDS=3600 codeclimate/codeclimate:0.75.0 analyze -e phpmd -e eslint -f html > codereview.html
-
 test-codereview:
     stage: test
     environment: testing
