@@ -39,6 +39,7 @@ class Test_Rabbitmq_client extends TestCase
      *
      * @param bool $hasData if true, insert data to queue
      * @throws Exception
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     private function beforeTest($hasData = true)
     {
