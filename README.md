@@ -6,7 +6,7 @@
 
 - Rabbit MQ Installed on your server (at least 3.5.*)
 - [php-amqplib](https://github.com/php-amqplib/php-amqplib)
-- CodeIgniter Framework (3.* recommanded)
+- CodeIgniter Framework (3.* recommended)
 - PHP 5.4+ (with Composer)
 
 ## Installation
@@ -14,9 +14,11 @@
 ### Step 1 : Add the following line to your composer.json file
 
 ```json
-"require": {
-    "santiane/rabbitmq_client": "5.*"
-},
+{
+  "require": {
+      "santiane/rabbitmq_client": "5.*"
+  }
+}
 ```
 
 ### Step 2 : Run a composer update in the directory of your project with the following command :
@@ -50,16 +52,16 @@ $config['rabbitmq_client'] = array(
 (Or just in a CI Controller)
 
 ```php
-$this->load->add_package_path(FCPATH.'vendor/santiane/rabbitmq_client');
-$this->load->library('rabbitmq_client');
-$this->load->remove_package_path(FCPATH.'vendor/santiane/rabbitmq_client');
+$this->load->add_package_path(RABBITMQ_CLIENT_PATH)
+    ->library('rabbitmq_client')
+    ->remove_package_path(RABBITMQ_CLIENT_PATH);
 ```
 
 ### Step 5 : Enjoy and give me some improvements or ideas ! ;)
 
 ## Examples
 
-#### 1 - Pushing some datas in a Queue:
+#### 1 - Pushing some data in a Queue:
 
 This will create, if it does not exist, the **'hello_queue'** queue and insert **'Hello World !'** text inside it.
 
@@ -79,9 +81,9 @@ $ php www.mywebsite.com/index.php 'controller' 'method'
 $ [+] Pushing 'Hello World !' to 'hello_queue' -> OK
 ```
 
-#### 2 - Fetching some datas from a Queue **(only in CLI at this time)**:
+#### 2 - Fetching some data from a Queue **(only in CLI at this time)**:
 
-This will fetch last inserted datas from the **'hello_queue'** in real time, with parmanent mode activated and **'_process'** callback function.
+This will fetch last inserted data from the **'hello_queue'** in real time, with permanent mode activated and **'_process'** callback function.
 
 The PHP Code :
 ```php
@@ -93,7 +95,7 @@ Run it in CLI :
 $ php www.mywebsite.com/index.php 'controller' 'method'
 ```
 
-#### 3 - Pushing some datas in a Queue with additional parameters:
+#### 3 - Pushing some data in a Queue with additional parameters:
 
 This will create, if it does not exist, the **'hello_queue'** queue and insert **'Hello World !'** text inside it, the third parameter **TRUE** set the durability of the **'hello_queue'** (TRUE = permanent, FALSE = not permanent), the last parameter **'delivery_mode (2)'** makes message persistent (you can also add some  parameters to this array).
 
