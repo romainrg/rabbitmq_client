@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpUndefinedMethodInspection */
+<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
@@ -6,6 +6,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @package  Rabbitmq_client
  * @category Tests
  * @version  20180706
+ * @property CI_Controller $CI
  */
 class Test_Rabbitmq_client extends TestCase
 {
@@ -80,7 +81,8 @@ class Test_Rabbitmq_client extends TestCase
     {
         $this->beforeTest(true);
         try {
-            $this->CI->rabbitmq_client->pull('test', false, function ($message) {
+            $this->CI->rabbitmq_client->pull(
+                'test', false, function ($message) {
                 $msg = json_decode($message->body);
                 $this->unitTest($msg->id, 1);
                 $message->delivery_info['channel']->basic_cancel($message->delivery_info['consumer_tag']);

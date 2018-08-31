@@ -48,7 +48,7 @@ class Rabbitmq_client {
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
      * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
      *
-     * @param  array $config Overrided Configuration at startup
+     * @param  array $config Overridden configuration at startup
      */
     public function __construct(array $config = array())
     {
@@ -74,7 +74,7 @@ class Rabbitmq_client {
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
      * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
      *
-     * @param  array $config Overrided Configuration at runtime
+     * @param  array $config Overridden Configuration at runtime
      */
     public function initialize(array $config = array())
     {
@@ -108,7 +108,7 @@ class Rabbitmq_client {
             // We declare the queue
             $this->channel->queue_declare($queue, false, $permanent, false, false, false, null, null);
 
-            // If the informations given are in an array, we convert it in json format
+            // If the information given are in an array, we convert it in json format
             $data = (is_array($data)) ? json_encode($data) : $data;
 
             // Create a new instance of message then push it into the selected queue
@@ -244,4 +244,4 @@ class Rabbitmq_client {
 }
 
 /* End of file Rabbitmq_client.php */
-/* Location: ./application/librairies/Rabbitmq_client.php */
+/* Location: ./application/libraries/Rabbitmq_client.php */
