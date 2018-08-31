@@ -2,23 +2,22 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * @package   CodeIgniter RabbitMQ Helper
+ * CodeIgniter RabbitMQ Helper
+ * @package   Rabbitmq_client
  * @category  Helpers
  * @author    Romain GALLIEN
  * @license   http://opensource.org/licenses/MIT > MIT License
  * @link      https://git.santiane.io/library/rabbitmq_client
- * @link      http://www.r-gallien.eu/
  *
  * CodeIgniter Helper for RabbitMQ library
  */
 if (!function_exists('rabbitmq_client_output'))
 {
-
     /**
      * [output_message : Output defined message in Browser or Console]
      * @param  [string] $message [Output message]
      * @param  [string] $type    [Output message]
-     * @return [type]            [description]
+     * @param  string $symbol
      */
     function rabbitmq_client_output($message, $type = NULL, $symbol = '>')
     {
@@ -35,7 +34,7 @@ if (!function_exists('rabbitmq_client_output'))
         } else {
             switch ($type) {
                 case 'error':
-                show_error($message, NULL, 'RabbitMQ Library Error');
+                    show_error($message, NULL, 'RabbitMQ Library Error');
                 break;
 
                 default:

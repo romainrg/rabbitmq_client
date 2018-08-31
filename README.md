@@ -14,9 +14,11 @@
 ### Step 1 : Add the following line to your composer.json file
 
 ```json
-"require": {
-    "santiane/rabbitmq_client": "5.*"
-},
+{
+  "require": {
+      "santiane/rabbitmq_client": "5.*"
+  }
+}
 ```
 
 ### Step 2 : Run a composer update in the directory of your project with the following command :
@@ -50,9 +52,9 @@ $config['rabbitmq_client'] = array(
 (Or just in a CI Controller)
 
 ```php
-$this->load->add_package_path(FCPATH.'vendor/santiane/rabbitmq_client');
-$this->load->library('rabbitmq_client');
-$this->load->remove_package_path(FCPATH.'vendor/santiane/rabbitmq_client');
+$this->load->add_package_path(RABBITMQ_CLIENT_PATH)
+    ->library('rabbitmq_client')
+    ->remove_package_path(RABBITMQ_CLIENT_PATH);
 ```
 
 ### Step 5 : Enjoy and give me some improvements or ideas ! ;)
