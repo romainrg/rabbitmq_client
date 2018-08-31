@@ -82,17 +82,28 @@ class Test_Rabbitmq_client extends TestCase
     {
         $this->beforeTest(true);
         try {
-            $this->CI->rabbitmq_client->pull(
-                'test', false, function ($message) {
-                $msg = json_decode($message->body);
-                $this->unitTest($msg->id, 1);
-                $message->delivery_info['channel']->basic_cancel($message->delivery_info['consumer_tag']);
-                throw new Exception('Exception Callback');
+            $this->CI->rabbitmq_client->pull('test', false, function ($message) {
+                try {
+                    $test = 2;
+                    $msg = json_decode($message->body);
+                    $this->unitTest($msg->id, 1);
+                    $message->delivery_info['channel']->basic_cancel($message->delivery_info['consumer_tag']);
+                    throw new Exception('Exception Callback');
+                } catch (Exception $e) {
+                    $test = 1;
+                } finally {
+                    $this->unitTest($test, 1);
+                }
+
             }, array('delivery_mode' => 2));
             $this->CI->rabbitmq_client->pull('test', false, function ($message) {
-                $msg = json_decode($message->body);
-                $this->unitTest($msg->id, 2);
-                $message->delivery_info['channel']->basic_cancel($message->delivery_info['consumer_tag']);
+                try {
+                    $msg = json_decode($message->body);
+                    $this->unitTest($msg->id, 2);
+                    $message->delivery_info['channel']->basic_cancel($message->delivery_info['consumer_tag']);
+                } catch (Exception $e) {
+                    $this->unitTest(2, 1);
+                }
             });
         } catch (Exception $e) {
             $this->unitTest(2, 1);
@@ -111,10 +122,14 @@ class Test_Rabbitmq_client extends TestCase
         $this->beforeTest(true);
         try {
             $this->CI->rabbitmq_client->pull('test', false, function ($message) {
-                $msg = json_decode($message->body);
-                $this->unitTest(1, $msg->id);
-                $message->delivery_info['channel']->basic_cancel($message->delivery_info['consumer_tag']);
-                $this->CI->rabbitmq_client->lock($message);
+                try {
+                    $msg = json_decode($message->body);
+                    $this->unitTest(1, $msg->id);
+                    $message->delivery_info['channel']->basic_cancel($message->delivery_info['consumer_tag']);
+                    $this->CI->rabbitmq_client->lock($message);
+                } catch (Exception $e) {
+                    $this->unitTest(2, 1);
+                }
             });
         } catch (Exception $e) {
             $this->unitTest(2, 1);
@@ -133,17 +148,25 @@ class Test_Rabbitmq_client extends TestCase
         $this->beforeTest(true);
         try {
             $this->CI->rabbitmq_client->pull('test', false, function ($message) {
-                $msg = json_decode($message->body);
-                $this->unitTest(1, $msg->id);
-                $message->delivery_info['channel']->basic_cancel($message->delivery_info['consumer_tag']);
-                $this->CI->rabbitmq_client->unlock($message);
+                try {
+                    $msg = json_decode($message->body);
+                    $this->unitTest(1, $msg->id);
+                    $message->delivery_info['channel']->basic_cancel($message->delivery_info['consumer_tag']);
+                    $this->CI->rabbitmq_client->unlock($message);
+                } catch (Exception $e) {
+                    $this->unitTest(2, 1);
+                }
             });
 
             $this->CI->rabbitmq_client->pull('test', false, function ($message) {
-                $msg = json_decode($message->body);
-                $this->unitTest(2, $msg->id);
-                $message->delivery_info['channel']->basic_cancel($message->delivery_info['consumer_tag']);
-                $this->CI->rabbitmq_client->unlock($message);
+                try {
+                    $msg = json_decode($message->body);
+                    $this->unitTest(2, $msg->id);
+                    $message->delivery_info['channel']->basic_cancel($message->delivery_info['consumer_tag']);
+                    $this->CI->rabbitmq_client->unlock($message);
+                } catch (Exception $e) {
+                    $this->unitTest(2, 1);
+                }
             });
         } catch (Exception $e) {
             $this->unitTest(2, 1);
@@ -162,15 +185,23 @@ class Test_Rabbitmq_client extends TestCase
         $this->beforeTest(true);
         try {
             $this->CI->rabbitmq_client->pull('test', false, function ($message) {
-                $msg = json_decode($message->body);
-                $this->unitTest($msg->id, 1);
-                $message->delivery_info['channel']->basic_cancel($message->delivery_info['consumer_tag']);
+                try {
+                    $msg = json_decode($message->body);
+                    $this->unitTest($msg->id, 1);
+                    $message->delivery_info['channel']->basic_cancel($message->delivery_info['consumer_tag']);
+                } catch (Exception $e) {
+                    $this->unitTest(2, 1);
+                }
             });
 
             $this->CI->rabbitmq_client->pull('test', false, function ($message) {
-                $msg = json_decode($message->body);
-                $this->unitTest($msg->id, 2);
-                $message->delivery_info['channel']->basic_cancel($message->delivery_info['consumer_tag']);
+                try {
+                    $msg = json_decode($message->body);
+                    $this->unitTest($msg->id, 2);
+                    $message->delivery_info['channel']->basic_cancel($message->delivery_info['consumer_tag']);
+                } catch (Exception $e) {
+                    $this->unitTest(2, 1);
+                }
             });
         } catch (Exception $e) {
             $this->unitTest(2, 1);
