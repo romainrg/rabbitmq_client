@@ -7,7 +7,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $config['rabbitmq_client'] = array(
     'host' => 'localhost',
     'port' => 5672,
-    'user' => 'guest',
-    'pass' => 'guest',
-    'vhost' => '/'
+    'user' => 'username',
+    'pass' => 'password',
+    'vhost' => '/',
+    'allowed_methods' => null,
+    'non_blocking' => false,
+    'timeout' => 0
 );
