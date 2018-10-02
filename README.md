@@ -16,7 +16,7 @@
 ```json
 {
   "require": {
-      "santiane/rabbitmq_client": "5.*"
+      "santiane/rabbitmq_client": "6.*"
   }
 }
 ```
@@ -39,11 +39,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * Config for Rabbit MQ Library
  */
 $config['rabbitmq_client'] = array(
-    'host' => 'localhost',    // <- Your Host     (default: localhost)
-    'port' => 5672,           // <- Your Port     (default: 5672)
-    'user' => 'username',     // <- Your User     (default: guest)
-    'pass' => 'password',     // <- Your Password (default: guest)
-    'vhost' => '/'            // <- Your Vhost    (default: /)
+    'host' => 'localhost',     // <- Your Host               (default: localhost)
+    'port' => 5672,            // <- Your Port               (default: 5672)
+    'user' => 'username',      // <- Your User               (default: guest)
+    'pass' => 'password',      // <- Your Password           (default: guest)
+    'vhost' => '/',            // <- Your Vhost              (default: /)
+    'allowed_methods' => null, // <- Your Allowed methods    (default: null)
+    'non_blocking' => false,   // <- Your Non blocking rules (default: false)
+    'timeout' => 10            // <- Your Timeout            (default: 0)
 );
 ```
 
