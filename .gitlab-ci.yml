@@ -25,7 +25,7 @@ test-unitary:
         - docker run --rm --detach --name rabbitmqtest -d -p 5673:5672 -p 15672:15672 rabbitmq:3.6-management
         - cp -pv composer.json tests
         - docker run --rm --tty --volume $PWD:/app --workdir /app/tests composer:1.4 install --ignore-platform-reqs --no-scripts --no-progress
-        - cp -rpv tests/vendor/codeigniter/framework/* test
+        - cp -rpv tests/vendor/codeigniter/framework/* tests
         - sed -i 's~$config\[\x27composer_autoload\x27\] = FALSE;~$config["composer_autoload"] = FCPATH."vendor/autoload.php";~' tests/application/config/config.php
         - mkdir -p tests/vendor/santiane/rabbitmq_client
         - cp -rpv libraries tests/vendor/santiane/rabbitmq_client
