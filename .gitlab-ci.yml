@@ -23,21 +23,21 @@ test-unitary:
         - find ./ci -type f -exec chmod 755 {} +
     script:
         - docker run --rm --detach --name rabbitmqtest -d -p 5673:5672 -p 15672:15672 rabbitmq:3.6-management
-        - cp -pv composer.json test
-        - docker run --rm --tty --volume $PWD:/app --workdir /app/test composer:1.4 install --ignore-platform-reqs --no-scripts --no-progress
-        - cp -rpv test/vendor/codeigniter/framework/* test
-        - sed -i 's~$config\[\x27composer_autoload\x27\] = FALSE;~$config["composer_autoload"] = FCPATH."vendor/autoload.php";~' test/application/config/config.php
-        - mkdir -p test/vendor/santiane/rabbitmq_client
-        - cp -rpv libraries test/vendor/santiane/rabbitmq_client
-        - cp -rpv config test/vendor/santiane/rabbitmq_client
-        - cp -rpv helpers test/vendor/santiane/rabbitmq_client
-        - cp -rpv ci test
-        - docker run --rm --tty -e CI_ENV=testing --volume $PWD:/app --workdir /app/test --entrypoint="ci/docker_entrypoint_php.sh" php:7.1 php /app/test/index.php unity runComplete
+        - cp -pv composer.json tests
+        - docker run --rm --tty --volume $PWD:/app --workdir /app/tests composer:1.4 install --ignore-platform-reqs --no-scripts --no-progress
+        - cp -rpv tests/vendor/codeigniter/framework/* test
+        - sed -i 's~$config\[\x27composer_autoload\x27\] = FALSE;~$config["composer_autoload"] = FCPATH."vendor/autoload.php";~' tests/application/config/config.php
+        - mkdir -p tests/vendor/santiane/rabbitmq_client
+        - cp -rpv libraries tests/vendor/santiane/rabbitmq_client
+        - cp -rpv config tests/vendor/santiane/rabbitmq_client
+        - cp -rpv helpers tests/vendor/santiane/rabbitmq_client
+        - cp -rpv ci tests
+        - docker run --rm --tty -e CI_ENV=testing --volume $PWD:/app --workdir /app/tests --entrypoint="ci/docker_entrypoint_php.sh" php:7.1 php index.php unity runComplete
     after_script:
         - docker stop rabbitmqtest
     artifacts:
         when: on_failure
-        paths: [test/result_test.html]
+        paths: [tests/result_test.html]
     only:
         - testing
     
