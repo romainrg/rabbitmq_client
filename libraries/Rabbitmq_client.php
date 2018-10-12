@@ -172,7 +172,7 @@ class Rabbitmq_client {
 
         // Continue the process of CLI command, waiting for others instructions
         while (count($this->channel->callbacks)) {
-            $this->channel->wait();
+            $this->channel->wait($this->config['allowed_methods'], $this->config['non_blocking'], $this->config['timeout']);
         }
     }
 

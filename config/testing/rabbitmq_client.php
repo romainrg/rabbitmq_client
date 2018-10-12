@@ -9,5 +9,8 @@ $config['rabbitmq_client'] = array(
     'port' => 5673,
     'user' => 'guest',
     'pass' => 'guest',
-    'vhost' => '/'
+    'vhost' => '/',
+    'allowed_methods' => null,
+    'non_blocking' => false,
+    'timeout' => 0
 );
