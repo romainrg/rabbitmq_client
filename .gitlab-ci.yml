@@ -31,7 +31,8 @@ test-unitary:
         - cp -rpv libraries test/vendor/santiane/rabbitmq_client
         - cp -rpv config test/vendor/santiane/rabbitmq_client
         - cp -rpv helpers test/vendor/santiane/rabbitmq_client
-        - docker run --rm --tty -e CI_ENV=testing --entrypoint="ci/docker_entrypoint_php.sh" --volume $PWD:/app --workdir /app/test php:7.1 php index.php unity runComplete
+        - cp -rpv ci test
+        - docker run --rm --tty -e CI_ENV=testing --volume $PWD:/app --workdir /app/test --entrypoint="ci/docker_entrypoint_php.sh" php:7.1 php index.php unity runComplete
     after_script:
         - docker stop rabbitmqtest
     artifacts:
