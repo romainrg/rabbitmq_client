@@ -3,11 +3,6 @@ image: docker:17.06
 stages:
     - test
 
-before_script:
-    - find . -type d -exec chmod 755 {} +
-    - find . -type f -exec chmod 644 {} +
-    - find ./ci -type f -exec chmod 755 {} +
-
 test-codereview:
     stage: test
     environment: testing
@@ -18,6 +13,7 @@ test-codereview:
         paths: [codereview.html]
     only:
         - testing
+
 test-unitary:
     stage: test
     environment: testing
@@ -43,10 +39,10 @@ test-unitary:
         - cp -rpv tests test/application
         - docker run --rm --tty -e CI_ENV=testing --entrypoint="ci/docker_entrypoint_php.sh" --volume $PWD:/app --workdir /app/test php:7.1 php /app/test/index.php unity runComplete
     after_script:
-        - docker ps --format '{{.Names}}' | grep "^rabbitmqtest" | awk '{print $1}' | xargs -I {} docker stop {} | xargs -I {} docker rm -v {}
+        - docker ps --format '{{.Names}}' | grep "^rabbitmqtest" | awk '{print $1}' | xargs -I {} docker stop {}
     artifacts:
         when: on_failure
         paths: [test/result_test.html]
-
     only:
         - testing
+    
