@@ -25,22 +25,22 @@ test-unitary:
         - find . -type d -exec chmod 755 {} +
         - find . -type f -exec chmod 644 {} +
         - find ./ci -type f -exec chmod 755 {} +
-        - docker run --rm --name rabbitmqtest -d -p 5673:5672 -p 15672:15672 rabbitmq:3.6-management
     script:
-        - mkdir test
-        - cp -v composer.json test
-        - cp -rv ci test
+        - docker run --rm --detach --name rabbitmqtest -d -p 5673:5672 -p 15672:15672 rabbitmq:3.6-management
+        - mkdir -v test
+        - cp -pv composer.json test
+        - cp -rpv ci test
         - docker run --rm --tty --volume $PWD:/app --workdir /app/test composer:1.4 install --ignore-platform-reqs --no-scripts --no-progress
-        - cp -r test/vendor/codeigniter/framework/* test
+        - cp -rpv test/vendor/codeigniter/framework/* test
         - sed -i 's~$config\[\x27composer_autoload\x27\] = FALSE;~$config["composer_autoload"] = FCPATH."vendor/autoload.php";~' test/application/config/config.php
         - mkdir -p test/vendor/santiane/rabbitmq_client
-        - cp -r libraries test/vendor/santiane/rabbitmq_client
-        - cp -r config test/vendor/santiane/rabbitmq_client
-        - cp -r helpers test/vendor/santiane/rabbitmq_client
-        - cp -r tests test/vendor/santiane/rabbitmq_client
-        - cp controllers/Unity.php test/application/controllers
-        - cp -r config test/application
-        - cp -r tests test/application
+        - cp -rpv libraries test/vendor/santiane/rabbitmq_client
+        - cp -rpv config test/vendor/santiane/rabbitmq_client
+        - cp -rpv helpers test/vendor/santiane/rabbitmq_client
+        - cp -rpv tests test/vendor/santiane/rabbitmq_client
+        - cp -pv controllers/Unity.php test/application/controllers
+        - cp -rpv config test/application
+        - cp -rpv tests test/application
         - docker run --rm --tty -e CI_ENV=testing --entrypoint="ci/docker_entrypoint_php.sh" --volume $PWD:/app --workdir /app/test php:7.1 php /app/test/index.php unity runComplete
     after_script:
         - docker ps --format '{{.Names}}' | grep "^rabbitmqtest" | awk '{print $1}' | xargs -I {} docker stop {} | xargs -I {} docker rm -v {}
