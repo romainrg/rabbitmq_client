@@ -12,12 +12,13 @@ test-codereview:
     stage: test
     environment: testing
     script:
-        - docker run --rm --tty --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock --volume /tmp/cc:/tmp/cc --env CODECLIMATE_CODE="$PWD" --env CONTAINER_TIMEOUT_SECONDS=3600 codeclimate/codeclimate:0.75.0 analyze -e phpmd -e eslint -f html > codereview.html && cat codereview.html | grep -i 'no issue'
+        - docker run --rm --tty --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock --volume /tmp/cc:/tmp/cc --env CODECLIMATE_CODE="$PWD" --env CONTAINER_TIMEOUT_SECONDS=3600 codeclimate/codeclimate:0.78.1 analyze -e phpmd -e eslint -f html > codereview.html && cat codereview.html | grep -i 'no issue'
     artifacts:
         when: on_failure
         paths: [codereview.html]
     only:
         - testing
+
 test-unitary:
     stage: test
     environment: testing
@@ -30,14 +31,14 @@ test-unitary:
         - mkdir -v test
         - cp -pv composer.json test
         - cp -rpv ci test
-        - docker run --rm --tty --volume $PWD:/app --workdir /app/test composer:1.4 install --ignore-platform-reqs --no-scripts --no-progress
+        - docker run --rm --tty --volume $PWD:/app --workdir /app/test composer:1.7 install --ignore-platform-reqs --no-scripts --no-progress
         - cp -rpv test/vendor/codeigniter/framework/* test
         - sed -i 's~$config\[\x27composer_autoload\x27\] = FALSE;~$config["composer_autoload"] = FCPATH."vendor/autoload.php";~' test/application/config/config.php
-        - mkdir -p test/vendor/santiane/rabbitmq_client
-        - cp -rpv libraries test/vendor/santiane/rabbitmq_client
-        - cp -rpv config test/vendor/santiane/rabbitmq_client
-        - cp -rpv helpers test/vendor/santiane/rabbitmq_client
-        - cp -rpv tests test/vendor/santiane/rabbitmq_client
+        - mkdir -p test/vendor/romainrg/rabbitmq_client
+        - cp -rpv libraries test/vendor/romainrg/rabbitmq_client
+        - cp -rpv config test/vendor/romainrg/rabbitmq_client
+        - cp -rpv helpers test/vendor/romainrg/rabbitmq_client
+        - cp -rpv tests test/vendor/romainrg/rabbitmq_client
         - cp -pv controllers/Unity.php test/application/controllers
         - cp -rpv config test/application
         - cp -rpv tests test/application
@@ -47,6 +48,5 @@ test-unitary:
     artifacts:
         when: on_failure
         paths: [test/result_test.html]
-
     only:
         - testing
