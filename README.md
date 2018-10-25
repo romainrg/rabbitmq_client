@@ -19,7 +19,7 @@ composer require romainrg/rabbitmq_client
 Or by adding following lines to your `composer.json` file :
 ```json
 "require": {
-    "romainrg/rabbitmq_client": "^4.0.0"
+    "romainrg/rabbitmq_client": "^6.2.0"
 },
 ```
 Don't forget to include your autoload to CI config file :
@@ -45,11 +45,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * Config for Rabbit MQ Library
  */
 $config['rabbitmq'] = array(
-    'host' => 'localhost',    // <- Your Host     (default: localhost)
-    'port' => 5672,           // <- Your Port     (default: 5672)
-    'user' => 'username',     // <- Your User     (default: guest)
-    'pass' => 'password',     // <- Your Password (default: guest)
-    'vhost' => '/'            // <- Your Vhost    (default: /)
+    'host' => 'localhost',     // <- Your Host       (default: localhost)
+    'port' => 5672,            // <- Your Port       (default: 5672)
+    'user' => 'username',      // <- Your User       (default: guest)
+    'pass' => 'password',      // <- Your Password   (default: guest)
+    'vhost' => '/',            // <- Your Vhost      (default: /)
+    'allowed_methods' => null, // <- Allowed methods (default: null)
+    'non_blocking' => false,   // <- Your Host       (default: false)
+    'timeout' => 0             // <- Timeout         (default: 0)          
 );
 ```
 
