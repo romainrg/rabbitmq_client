@@ -15,6 +15,9 @@ test-codereview:
         - testing
 
 test-unitary:
+    services:
+        - name: rabbitmq:3.6-management
+          alias: rabbitmqtest
     stage: test
     environment: testing
     before_script:
@@ -22,7 +25,6 @@ test-unitary:
         - find . -type f -exec chmod 644 {} +
         - find ./ci -type f -exec chmod 755 {} +
     script:
-        - docker run --rm --detach --name rabbitmqtest -d -p 5673:5672 -p 15672:15672 rabbitmq:3.6-management
         - cp -pv composer.json tests
         - docker run --rm --tty --volume $PWD:/app --workdir /app/tests composer:1.4 install --ignore-platform-reqs --no-scripts --no-progress
         - cp -rpv tests/vendor/codeigniter/framework/* tests
@@ -33,8 +35,6 @@ test-unitary:
         - cp -rpv helpers tests/vendor/santiane/rabbitmq_client
         - cp -rpv ci tests
         - docker run --rm --tty -e CI_ENV=testing --volume $PWD:/app --workdir /app/tests --entrypoint="ci/docker_entrypoint_php.sh" php:7.1 php index.php unity runComplete
-    after_script:
-        - docker stop rabbitmqtest
     artifacts:
         when: always
         paths: [tests/result_test.html]
