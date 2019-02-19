@@ -24,16 +24,7 @@ test-unitary:
         - find . -type f -exec chmod 644 {} +
         - find ./ci -type f -exec chmod 755 {} +
     script:
-        - cp -pv composer.json tests
-        - docker run --rm --tty --volume $PWD:/app --workdir /app/tests composer:1.4 install --ignore-platform-reqs --no-scripts --no-progress
-        - cp -rpv tests/vendor/codeigniter/framework/* tests
-        - sed -i 's~$config\[\x27composer_autoload\x27\] = FALSE;~$config["composer_autoload"] = FCPATH."vendor/autoload.php";~' tests/application/config/config.php
-        - mkdir -p tests/vendor/santiane/rabbitmq_client
-        - cp -rpv libraries tests/vendor/santiane/rabbitmq_client
-        - cp -rpv config tests/vendor/santiane/rabbitmq_client
-        - cp -rpv helpers tests/vendor/santiane/rabbitmq_client
-        - cp -rpv ci tests
-        - docker run --rm --tty -e CI_ENV=testing --volume $PWD:/app --workdir /app/tests --entrypoint="ci/docker_entrypoint_php.sh" php:7.1 php index.php unity runComplete
+        - docker ps -a
     artifacts:
         when: always
         paths: [tests/result_test.html]
