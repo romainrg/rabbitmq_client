@@ -162,11 +162,10 @@ class Rabbitmq_client {
      * @param  string $queue Specified queue
      * @param  bool $permanent Permanent mode of the queue
      * @param  array $callback Callback to treat the data
-     * @param  array $params params to push the message in the queue after an exception not caught by the application
      * @throws Exception
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function pull($queue = null, $permanent = false, $callback = array(), $params = array())
+    public function pull($queue = null, $permanent = false, $callback = array())
     {
         // We check if the queue is not empty then we declare the queue
         if(empty($queue)) {
@@ -185,7 +184,7 @@ class Rabbitmq_client {
             $this->channel->basic_qos(null, 1, null);
 
             // Define consuming with 'process' callback
-            $this->channel->basic_consume($queue, '', false, false, false, false, function ($message) use ($callback, $queue, $permanent, $params) {
+            $this->channel->basic_consume($queue, '', false, false, false, false, function ($message) use ($callback, $queue, $permanent) {
                 // Call application treatment
                 $callback($message);
             });

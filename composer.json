@@ -11,7 +11,7 @@
     }],
     "repositories": [{
         "type": "git",
-        "url": "https://git.santiane.io/library/unity.git"
+        "url": "https://composer:sLaGBuABBA5Fxm4xb873RtuHCZ3yar@git.santiane.io/library/unity.git"
     }],
     "require": {
         "php": ">=5.4.0",
