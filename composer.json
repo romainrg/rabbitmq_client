@@ -1,38 +1,24 @@
 {
-    "name": "santiane/rabbitmq_client",
+    "name": "romainrg/rabbitmq_client",
     "keywords": ["library", "codeigniter", "rabbitmq"],
     "description": "CodeIgniter Library for RabbitMQ interactions with CodeIgniter using PHP-AMQPLib",
-    "homepage": "https://git.santiane.io/library/rabbitmq_client.git",
-    "license": "MIT License",
-    "authors": [
-        {
-            "name": "Romain Gallien",
-            "email": "romaingallien.rg@gmail.com",
-            "role": "WEB/PHP Developer"
-        },
-        {
-            "name": "Stéphane Lucien-Vauthier",
-            "email": "s.lucien_vauthier@santiane.fr",
-            "role": "WEB/PHP Developer"
-        },
-        {
-            "name": "Yoann Vanitou ",
-            "email": "y.vanitou@santiane.fr",
-            "role": "WEB/PHP Developer"
-        }
-    ],
-  "repositories": [
-    {
-      "type": "git",
-      "url": "https://composer:sLaGBuABBA5Fxm4xb873RtuHCZ3yar@git.santiane.io/library/unity.git"
-    }
-  ],
-  "require-dev": {
-    "santiane/unity": "2.2.4"
-  },
+    "homepage": "https://github.com/romainrg/rabbitmq_client.git",
+    "license": "GPL-3.0-or-later",
+    "authors": [{
+        "name": "Romain Gallien",
+        "email": "romaingallien.rg@gmail.com",
+        "role": "DevOps Engineer"
+    }],
+    "repositories": [{
+        "type": "git",
+        "url": "https://git.santiane.io/library/unity.git"
+    }],
     "require": {
-      "codeigniter/framework": "~3.1",
         "php": ">=5.4.0",
-        "php-amqplib/php-amqplib": "^2.6.2"
+        "codeigniter/framework": "^3.1",
+        "php-amqplib/php-amqplib": "^2.8.1"
+    },
+    "require-dev": {
+        "santiane/unity": "2.2.4"
     }
 }

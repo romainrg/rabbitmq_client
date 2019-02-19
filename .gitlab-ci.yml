@@ -7,7 +7,7 @@ test-codereview:
     stage: test
     environment: testing
     script:
-        - docker run --rm --tty --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock --volume /tmp/cc:/tmp/cc --env CODECLIMATE_CODE="$PWD" --env CONTAINER_TIMEOUT_SECONDS=3600 codeclimate/codeclimate:0.75.0 analyze -e phpmd -e eslint -f html > codereview.html && cat codereview.html | grep -i 'no issue'
+        - docker run --rm --tty --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock --volume /tmp/cc:/tmp/cc --env CODECLIMATE_CODE="$PWD" --env CONTAINER_TIMEOUT_SECONDS=3600 codeclimate/codeclimate:0.78.1 analyze -e phpmd -e eslint -f html > codereview.html && cat codereview.html | grep -i 'no issue'
     artifacts:
         when: always
         paths: [codereview.html]
