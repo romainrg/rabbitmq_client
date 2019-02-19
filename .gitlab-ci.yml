@@ -25,6 +25,6 @@ test-unitary:
         - find . -type f -exec chmod 644 {} +
         - find ./ci -type f -exec chmod 755 {} +
     script:
-        - docker-compose ps -q
+        - docker ps -q
     only:
         - testing
