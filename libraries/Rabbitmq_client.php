@@ -1,4 +1,12 @@
 <?php
+
+use PhpAmqpLib\Channel\AMQPChannel;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Exception\AMQPIOException;
+use PhpAmqpLib\Message\AMQPMessage;
+
+require_once RABBITMQ_CLIENT_PATH.'/config/constants.php';
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
@@ -64,7 +72,11 @@ class Rabbitmq_client {
         $this->config = (!empty($config)) ? $config : array();
 
         // Initialize the connection
-        $this->initialize($this->config);
+        try {
+            $this->initialize($this->config);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
     /**
@@ -84,8 +96,19 @@ class Rabbitmq_client {
             rabbitmq_client_output('Invalid configuration file', 'error', 'x');
             throw new Exception("Invalid configuration file");
         }
-
         $this->config = $config['rabbitmq_client'];
+    }
+
+    /**
+     * Connect to rabboitmq
+     *
+     * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     *
+     * @throws
+     */
+    private function connect()
+    {
+        register_shutdown_function(array($this, 'cleanup_connection'));
         $this->connexion = new PhpAmqpLib\Connection\AMQPStreamConnection($this->config['host'], $this->config['port'], $this->config['user'], $this->config['pass'], $this->config['vhost']);
         $this->channel = $this->connexion->channel();
     }
@@ -110,6 +133,9 @@ class Rabbitmq_client {
             rabbitmq_client_output('You did not specify the [queue] parameter', 'error', 'x');
             throw new Exception("You did not specify the [queue] parameter");
         }
+
+        // Connect to rabbit
+        $this->connect();
 
         // We declare the queue
         $this->channel->queue_declare($queue, false, $permanent, false, false, false, null, null);
@@ -148,32 +174,31 @@ class Rabbitmq_client {
             throw new Exception("You did not specify the [queue] parameter");
         }
 
-        // Declaring the queue again
-        $this->channel->queue_declare($queue, false, $permanent, false, false, false, null, null);
+        try {
+            // Connect to rabbit
+            $this->connect();
 
-        // Limit the number of unacknowledged
-        $this->channel->basic_qos(null, 1, null);
+            // Declaring the queue again
+            $this->channel->queue_declare($queue, false, $permanent, false, false, false, null, null);
 
-        // Define consuming with 'process' callback
-        $this->channel->basic_consume($queue, '', false, false, false, false, function ($message) use ($callback, $queue, $permanent, $params) {
-            try {
+            // Limit the number of unacknowledged
+            $this->channel->basic_qos(null, 1, null);
+
+            // Define consuming with 'process' callback
+            $this->channel->basic_consume($queue, '', false, false, false, false, function ($message) use ($callback, $queue, $permanent, $params) {
                 // Call application treatment
                 $callback($message);
-            } catch (Exception $e) {
-                error_log($e->getMessage());
-                $this->unlock($message);
-                $this->push($queue, json_encode(json_decode($message->body)), $permanent, $params);
-            } catch (Throwable $t) {
-                error_log($t->getMessage());
-                $this->unlock($message);
-                $this->push($queue, json_encode(json_decode($message->body)), $permanent, $params);
-            }
-        });
+            });
 
-        // Continue the process of CLI command, waiting for others instructions
-        while (count($this->channel->callbacks)) {
-            $this->channel->wait($this->config['allowed_methods'], $this->config['non_blocking'], $this->config['timeout']);
+            // Continue the process of CLI command, waiting for others instructions
+            while (count($this->channel->callbacks)) {
+                $this->channel->wait($this->config['allowed_methods'], $this->config['non_blocking'], $this->config['timeout']);
+            }
+        } catch(PhpAmqpLib\Exception\AMQPIOException $e) {
+        } catch(RuntimeException $e) {
+        } catch(ErrorException $e) {
         }
+        $this->cleanup_connection();
     }
 
     /**
@@ -201,18 +226,6 @@ class Rabbitmq_client {
     }
 
     /**
-     * Move a message from a queue to another one
-     *
-     * @author Romain GALLIEN <romaingallien.rg@gmail.com>
-     *
-     * @throws
-     */
-    public function move()
-    {
-        throw new Exception("This method does not exist");
-    }
-
-    /**
      * Delete everything in the selected queue
      *
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
@@ -221,9 +234,38 @@ class Rabbitmq_client {
      * @param  string  $queue to purge
      * @throws
      */
-    public function purge($queue = null)
+    public function purge($queue = '')
     {
-        $this->channel->queue_purge($queue);
+        // Connect to rabbit
+        $this->connect();
+
+        // Purge queue if exist
+        if (!empty($queue)) {
+            $this->channel->queue_purge($queue);
+        }
+    }
+
+    /**
+     * Close the channel and the connection
+     *
+     * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     */
+    public function cleanup_connection() {
+        try {
+            // Close the channel
+            if(!empty($this->channel)) {
+                $this->channel->close();
+                $this->channel = null;
+            }
+
+            // Close the connexion
+            if(!empty($this->connexion)) {
+                $this->connexion->close();
+                $this->connexion = null;
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
     /**
@@ -233,15 +275,7 @@ class Rabbitmq_client {
      */
     public function __destruct()
     {
-        // Close the channel
-        if(!empty($this->channel)) {
-            $this->channel->close();
-        }
-
-        // Close the connexion
-        if(!empty($this->connexion)) {
-            $this->connexion->close();
-        }
+        $this->cleanup_connection();
     }
 }
 

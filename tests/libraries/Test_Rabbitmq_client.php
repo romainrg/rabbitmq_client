@@ -209,24 +209,6 @@ class Test_Rabbitmq_client extends TestCase
     }
 
     /**
-     * Test to move message in another queue
-     *
-     * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
-     *
-     * @throws Exception
-     */
-    public function move()
-    {
-        $this->beforeTest(true);
-        try {
-            $this->CI->rabbitmq_client->move();
-            $this->unitTest(2, 1);
-        } catch (Exception $e) {
-            $this->unitTest(1, 1);
-        }
-    }
-
-    /**
      * Test to purge queue
      *
      * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
