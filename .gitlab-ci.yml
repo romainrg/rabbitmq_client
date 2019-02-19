@@ -24,9 +24,7 @@ test-unitary:
         - find . -type f -exec chmod 644 {} +
         - find ./ci -type f -exec chmod 755 {} +
     script:
-        - docker ps -a
-    artifacts:
-        when: always
-        paths: [tests/result_test.html]
+        - docker images
+        - docker ps
     only:
         - testing
