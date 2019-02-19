@@ -17,6 +17,7 @@ test-codereview:
 test-unitary:
     services:
         - name: rabbitmq:3.6-management
+          alias: rabbitmq
     stage: test
     environment: testing
     before_script:
