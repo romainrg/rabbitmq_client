@@ -34,7 +34,7 @@ test-unitary:
         - cp -rpv libraries test/vendor/romainrg/rabbitmq_client
         - cp -rpv config test/vendor/romainrg/rabbitmq_client
         - cp -rpv helpers test/vendor/romainrg/rabbitmq_client
-        - cp -rpv tests test
+        - cp -rpv tests/* test
         - ls -l test
         - ls -l test/application/controllers
         - ls -l test/application/config
