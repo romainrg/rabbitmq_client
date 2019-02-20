@@ -29,7 +29,7 @@ test-unitary:
         - find . -type f -exec chmod 644 {} +
         - find ./ci -type f -exec chmod 755 {} +
     script:
-        - ls -l /builds/$CI_PROJECT_PATH
+        - pwd
     artifacts:
         when: always
         paths: [test/result_test.html]
