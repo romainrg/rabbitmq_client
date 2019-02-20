@@ -29,7 +29,7 @@ test-unitary:
         - find . -type f -exec chmod 644 {} +
         - find ./ci -type f -exec chmod 755 {} +
     script:
-        - docker run --rm --tty -v "/builds/$CI_PROJECT_PATH:/app" php:7.1 ls -l /app
+        - docker run --rm --tty -v "/builds/$CI_PROJECT_PATH:/app" php:7.1 ls -l /
     artifacts:
         when: always
         paths: [test/result_test.html]
