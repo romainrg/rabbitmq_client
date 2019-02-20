@@ -27,9 +27,9 @@ class Test_Rabbitmq_client extends TestCase
         $this->stressTest = false;
         parent::__construct();
 
-        $this->CI->load->add_package_path('vendor/santiane/rabbitmq_client')
+        $this->CI->load->add_package_path('vendor/romainrg/rabbitmq_client')
             ->library('rabbitmq_client')
-            ->remove_package_path('vendor/santiane/rabbitmq_client');
+            ->remove_package_path('vendor/romainrg/rabbitmq_client');
     }
 
     /**
