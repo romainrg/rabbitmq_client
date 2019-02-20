@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+defined('RABBITMQ_CLIENT_PATH') OR define('RABBITMQ_CLIENT_PATH', FCPATH . 'vendor/romainrg/rabbitmq_client');
+
 /**
  * Test Rabbitmq_client
  * @package  Rabbitmq_client
@@ -91,10 +93,8 @@ class Test_Rabbitmq_client extends TestCase
                     throw new Exception('Exception Callback');
                 } catch (Exception $e) {
                     $test = 1;
-                } finally {
-                    $this->unitTest($test, 1);
                 }
-
+                $this->unitTest($test, 1);
             }, array('delivery_mode' => 2));
             $this->CI->rabbitmq_client->pull('test', false, function ($message) {
                 try {
