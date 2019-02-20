@@ -37,5 +37,6 @@ test-unitary:
         - cp -rpv tests test
         - ls -l /app/test
         - ls -l /app/test/application/controllers
+        - ls -l /app/test/application/config
     only:
         - testing
