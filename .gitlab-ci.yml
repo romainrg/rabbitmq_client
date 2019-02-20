@@ -25,7 +25,5 @@ test-unitary:
         - find ./ci -type f -exec chmod 755 {} +
     script:
         - getent hosts rabbitmq | awk '{print $1}'
-        - dig rabbitmq a +short
-        - gethostip -d rabbitmq
     only:
         - testing
