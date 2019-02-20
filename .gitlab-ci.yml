@@ -34,8 +34,7 @@ test-unitary:
         - cp -rpv libraries test/vendor/romainrg/rabbitmq_client
         - cp -rpv config test/vendor/romainrg/rabbitmq_client
         - cp -rpv helpers test/vendor/romainrg/rabbitmq_client
-        - cp -rpv config test/application
-        - cp -rpv tests test/application
+        - cp -rpv tests test
         - HOST="$(getent hosts rabbitmq | awk '{print $1}')" && docker run --rm --tty -e CI_ENV=testing --add-host rabbitmq:${HOST} --entrypoint="ci/docker_entrypoint_php.sh" --volume $PWD:/app --workdir /app/test php:7.1 php /app/test/index.php unity runComplete
     only:
         - testing
