@@ -24,6 +24,6 @@ test-unitary:
         - find . -type f -exec chmod 644 {} +
         - find ./ci -type f -exec chmod 755 {} +
     script:
-        - HOST="$(getent hosts rabbitmq | awk '{print $1}')" && docker run --rm --tty --add-host rabbitmq:${HOST} php:7.1 ping -c 4 rabbitmq
+        - HOST="$(getent hosts rabbitmq | awk '{print $1}')" && docker run --rm --tty --add-host rabbitmq:${HOST} php:7.1 cat /etc/hosts
     only:
         - testing
