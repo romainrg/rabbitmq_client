@@ -24,6 +24,8 @@ test-unitary:
         - find . -type f -exec chmod 644 {} +
         - find ./ci -type f -exec chmod 755 {} +
     script:
-        - docker run --rm -e RABBITMQ=rabbitmq debian:latest echo $RABBITMQ
+        - getent hosts rabbitmq | awk '{print $1}'
+        - dig rabbitmq a +short
+        - gethostip -d rabbitmq
     only:
         - testing
