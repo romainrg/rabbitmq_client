@@ -2,7 +2,7 @@ image: docker:17.06
 
 services:
     - name: docker:dind
-      command: ["mount"]
+      entrypoint: [""]
 
 variables:
     DOCKER_HOST: tcp://docker:2375/
@@ -18,7 +18,7 @@ test-unitary:
         - find . -type f -exec chmod 644 {} +
         - find ./ci -type f -exec chmod 755 {} +
     script:
-        - ls /
+        - docker version
     artifacts:
         when: always
         paths: [test/result_test.html]
