@@ -6,7 +6,7 @@ services:
 variables:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_DRIVER: overlay2
-    MOUNT_POINT: $CI_PROJECT_DIR/test
+    SHARED_PATH: /builds/shared/$CI_PROJECT_PATH
 
 stages:
     - test
@@ -19,10 +19,10 @@ test-unitary:
         - find . -type f -exec chmod 644 {} +
         - find ./ci -type f -exec chmod 755 {} +
     script:
-        - mkdir -v test
-        - touch test/test.txt
-        - echo $MOUNT_POINT
-        - docker run --rm --tty -v $MOUNT_POINT:/app debian:latest ls -l /app
+        - mkdir -p ${SHARED_PATH}
+        - touch ${SHARED_PATH}/test_file
+        - echo $SHARED_PATH
+        - docker run -v ${SHARED_PATH}:/mnt ubuntu ls /mnt
     artifacts:
         when: always
         paths: [test/result_test.html]
