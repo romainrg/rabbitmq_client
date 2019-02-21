@@ -14,7 +14,7 @@ test-unitary:
         - pwd
         - ls -l
         - ls -l /
-        - docker run --rm -v $pwd:/app ubuntu ls -l /app
+        - docker run --rm -v ${CI_PROJECT_DIR}:/app ubuntu ls -l /app
     artifacts:
         when: always
         paths: [test/result_test.html]
