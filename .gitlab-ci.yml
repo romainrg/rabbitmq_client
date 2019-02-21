@@ -2,7 +2,7 @@ image: docker:17.06
 
 services:
     - name: docker:dind
-      command: ["ls", "/"]
+      command: ["mount"]
 
 variables:
     DOCKER_HOST: tcp://docker:2375/
