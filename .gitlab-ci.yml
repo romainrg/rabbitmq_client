@@ -2,7 +2,7 @@ image: docker:17.06
 
 services:
     - name: docker:dind
-      entrypoint: ["ci/dind.entrypoint.sh"]
+      command: ["ls", "-lah","/"]
 
 variables:
     DOCKER_HOST: tcp://docker:2375/
