@@ -19,8 +19,7 @@ test-unitary:
         - find ./ci -type f -exec chmod 755 {} +
     script:
         - ls -l
-        - ls -l $CI_PROJECT_DIR
-        - echo $(dirname ${CI_PROJECT_DIR})
+        - docker run -v ${CI_PROJECT_DIR}:/mnt ubuntu ls /mnt
     artifacts:
         when: always
         paths: [test/result_test.html]
