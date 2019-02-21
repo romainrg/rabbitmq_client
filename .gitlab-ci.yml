@@ -12,8 +12,6 @@ stages:
     - test
 
 test-unitary:
-    services:
-        - rabbitmq:3.6-management
     stage: test
     environment: testing
     before_script:
