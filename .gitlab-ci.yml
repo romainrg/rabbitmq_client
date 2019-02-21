@@ -2,7 +2,7 @@ image: docker:17.06
 
 services:
     - name: docker:dind
-      command: ["ls","-lah","/var/lib/docker/volumes"]
+      command: ["ls","-lah","/var/lib/docker"]
 
 variables:
     DOCKER_HOST: tcp://docker:2375/
