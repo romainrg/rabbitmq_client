@@ -19,10 +19,12 @@ test-unitary:
         - find . -type f -exec chmod 644 {} +
         - find ./ci -type f -exec chmod 755 {} +
     script:
+        - ls -l
         - mkdir -p ${MOUNT_PATH}
         - touch ${MOUNT_PATH}/test.txt
+        - pwd
         - echo ${MOUNT_PATH}
-        - docker run -v ${MOUNT_PATH}:/mnt ubuntu ls /mnt
+        - docker run -v ${MOUNT_PATH}:/app ubuntu ls -l /app
     artifacts:
         when: always
         paths: [test/result_test.html]
