@@ -1,13 +1,5 @@
 image: docker:17.06
 
-services:
-    - docker:dind
-
-variables:
-    DOCKER_HOST: tcp://docker:2375/
-    DOCKER_DRIVER: overlay2
-    MOUNT_PATH: /builds
-
 stages:
     - test
 
@@ -22,7 +14,7 @@ test-unitary:
         - pwd
         - ls -l
         - ls -l /
-        - docker run ubuntu ls -l /
+        - docker run --rm -v $pwd:/app ubuntu ls -l /app
     artifacts:
         when: always
         paths: [test/result_test.html]
