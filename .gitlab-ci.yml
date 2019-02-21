@@ -18,6 +18,7 @@ test-unitary:
     variables:
         DOCKER_HOST: tcp://docker:2375/
         DOCKER_DRIVER: overlay2
+        MOUNT_POINT: $CI_PROJECT_DIR
     services:
         - rabbitmq:3.6-management
         - docker:dind
@@ -28,8 +29,7 @@ test-unitary:
         - find . -type f -exec chmod 644 {} +
         - find ./ci -type f -exec chmod 755 {} +
     script:
-        - pwd
-        - ls -l $CI_PROJECT_DIR
+        - docker run --rm --tty -v "$MOUNT_POINT:/app" debian:latest ls -l /app
     artifacts:
         when: always
         paths: [test/result_test.html]
