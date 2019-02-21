@@ -17,6 +17,9 @@ test-unitary:
         - find . -type f -exec chmod 644 {} +
         - find ./ci -type f -exec chmod 755 {} +
     script:
+        - mkdir -p /builds/shared/$CI_PROJECT_PATH
+        - touch /builds/shared/$CI_PROJECT_PATH/test.txt
+        - ls -l /builds/shared/$CI_PROJECT_PATH
         - docker run --rm -v /builds/shared/$CI_PROJECT_PATH:/builds/shared/$CI_PROJECT_PATH ubuntu ls -l /builds/shared/$CI_PROJECT_PATH
     artifacts:
         when: always
