@@ -2,7 +2,6 @@ image: docker:17.06
 
 services:
     - name: docker:dind
-      command: ["ls", "-lah","/"]
 
 variables:
     DOCKER_HOST: tcp://docker:2375/
@@ -12,15 +11,15 @@ stages:
 
 test-unitary:
     stage: test
+    services:
+        - rabbitmq:3.6-management
     environment: testing
     before_script:
         - find . -type d -exec chmod 755 {} +
         - find . -type f -exec chmod 644 {} +
         - find ./ci -type f -exec chmod 755 {} +
     script:
-        - docker version
-        - docker pull httpd:2.4
-        - docker pull httpd:2.4
+        - docker ps
     artifacts:
         when: always
         paths: [test/result_test.html]
