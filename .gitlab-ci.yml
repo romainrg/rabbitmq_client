@@ -31,7 +31,7 @@ test-unitary:
     script:
         - mkdir -v test
         - touch test/test.txt
-        - docker run --rm --tty -v ${MOUNT_POINT}:/app debian:latest ls /app
+        - docker run --rm --tty -v $MOUNT_POINT:/app debian:latest ls -l /app
     artifacts:
         when: always
         paths: [test/result_test.html]
