@@ -29,6 +29,7 @@ test-unitary:
         - find ./ci -type f -exec chmod 755 {} +
     script:
         - pwd
+        - ls -l $CI_PROJECT_DIR
     artifacts:
         when: always
         paths: [test/result_test.html]
