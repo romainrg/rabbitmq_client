@@ -6,6 +6,7 @@ services:
 variables:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_DRIVER: overlay2
+    MOUNT_PATH: /builds
 
 stages:
     - test
@@ -18,7 +19,7 @@ test-unitary:
         - find . -type f -exec chmod 644 {} +
         - find ./ci -type f -exec chmod 755 {} +
     script:
-        - docker run -v ${CI_PROJECT_DIR}:/mnt ubuntu ls -l /
+        - docker run ubuntu ls -l /
     artifacts:
         when: always
         paths: [test/result_test.html]
