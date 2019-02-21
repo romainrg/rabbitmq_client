@@ -30,10 +30,8 @@ test-unitary:
         - find ./ci -type f -exec chmod 755 {} +
     script:
         - mkdir -v test
-        - touch test.txt
-        - echo $CI_PROJECT_DIR
-        - echo $MOUNT_POINT
-        - docker run --rm --tty -v "$MOUNT_POINT:/app" debian:latest ls -l /app
+        - touch test/test.txt
+        - docker run --rm --tty -v ${MOUNT_POINT}:/app debian:latest ls /app
     artifacts:
         when: always
         paths: [test/result_test.html]
