@@ -1,4 +1,8 @@
 image: docker:17.06
+variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+    MOUNT_POINT: $CI_PROJECT_DIR/test
 
 stages:
     - test
@@ -15,20 +19,21 @@ test-codereview:
         - testing
 
 test-unitary:
-    variables:
-        DOCKER_HOST: tcp://docker:2375/
-        DOCKER_DRIVER: overlay2
-        MOUNT_POINT: $CI_PROJECT_DIR
     services:
         - rabbitmq:3.6-management
         - docker:dind
     stage: test
     environment: testing
     before_script:
+        -
         - find . -type d -exec chmod 755 {} +
         - find . -type f -exec chmod 644 {} +
         - find ./ci -type f -exec chmod 755 {} +
     script:
+        - mkdir -v test
+        - touch test.txt
+        - echo $CI_PROJECT_DIR
+        - echo $MOUNT_POINT
         - docker run --rm --tty -v "$MOUNT_POINT:/app" debian:latest ls -l /app
     artifacts:
         when: always
