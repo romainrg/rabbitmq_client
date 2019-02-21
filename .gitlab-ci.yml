@@ -1,11 +1,12 @@
 image: docker:17.06
 
 services:
-    - docker:dind
+    - name: docker:dind
+      command: ["ls", "/"]
 
 variables:
-    SHARED_PATH: /builds/shared/$CI_PROJECT_PATH
-
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
 stages:
     - test
 
@@ -17,10 +18,7 @@ test-unitary:
         - find . -type f -exec chmod 644 {} +
         - find ./ci -type f -exec chmod 755 {} +
     script:
-        - mkdir -p /builds/shared/$CI_PROJECT_PATH
-        - touch /builds/shared/$CI_PROJECT_PATH/test.txt
-        - ls -l /builds/shared/$CI_PROJECT_PATH
-        - docker run --rm -v /builds/shared/$CI_PROJECT_PATH:/builds/shared/$CI_PROJECT_PATH ubuntu ls -l /builds/shared/$CI_PROJECT_PATH
+        - ls /
     artifacts:
         when: always
         paths: [test/result_test.html]
