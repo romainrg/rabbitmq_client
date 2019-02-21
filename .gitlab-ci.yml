@@ -18,6 +18,9 @@ test-unitary:
         - find ./ci -type f -exec chmod 755 {} +
     script:
         - docker version
+        - docker pull httpd:2.4
+        - docker pull httpd:2.4
+        - ls -lah /var/lib/docker/volumes
     artifacts:
         when: always
         paths: [test/result_test.html]
