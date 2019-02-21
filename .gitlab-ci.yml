@@ -3,6 +3,9 @@ image: docker:17.06
 services:
     - docker:dind
 
+variables:
+    SHARED_PATH: /builds/shared/$CI_PROJECT_PATH
+
 stages:
     - test
 
@@ -14,7 +17,7 @@ test-unitary:
         - find . -type f -exec chmod 644 {} +
         - find ./ci -type f -exec chmod 755 {} +
     script:
-        - docker ps -a
+        - docker run --rm -v /builds/shared/$CI_PROJECT_PATH:/builds/shared/$CI_PROJECT_PATH ubuntu ls -l /builds/shared/$CI_PROJECT_PATH
     artifacts:
         when: always
         paths: [test/result_test.html]
