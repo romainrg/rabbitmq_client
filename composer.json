@@ -20,6 +20,6 @@
       "ext-sockets": "*"
     },
     "require-dev": {
-        "santiane/unity": "2.2.4"
+        "santiane/unity": "3.0"
     }
 }
