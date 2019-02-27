@@ -16,7 +16,8 @@
     "require": {
         "php": ">=5.4.0",
         "codeigniter/framework": "^3.1",
-        "php-amqplib/php-amqplib": "^2.8.1"
+        "php-amqplib/php-amqplib": "^2.8.1",
+      "ext-sockets": "*"
     },
     "require-dev": {
         "santiane/unity": "2.2.4"
