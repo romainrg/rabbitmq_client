@@ -53,7 +53,7 @@ class Rabbitmq_client {
      * Constructor
      *
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
-     * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     * @author Stéphane Lucien-Vauthier <direction@aslv-consulting.fr>
      *
      * @param  array $config Overridden configuration at startup
      */
@@ -83,7 +83,7 @@ class Rabbitmq_client {
      * Initialize the configuration of the Library
      *
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
-     * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     * @author Stéphane Lucien-Vauthier <direction@aslv-consulting.fr>
      *
      * @param  array $config Overridden Configuration at runtime
      *
@@ -102,7 +102,7 @@ class Rabbitmq_client {
     /**
      * Connect to rabboitmq
      *
-     * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     * @author Stéphane Lucien-Vauthier <direction@aslv-consulting.fr>
      *
      * @throws
      */
@@ -117,7 +117,7 @@ class Rabbitmq_client {
      * Push an element in the specified queue
      *
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
-     * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     * @author Stéphane Lucien-Vauthier <direction@aslv-consulting.fr>
 
      * @param  string $queue Specified queue
      * @param  mixed(string/array)  $data Data to push
@@ -157,7 +157,7 @@ class Rabbitmq_client {
      * Get the items from the specified queue
      *
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
-     * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     * @author Stéphane Lucien-Vauthier <direction@aslv-consulting.fr>
      *
      * @param  string $queue Specified queue
      * @param  bool $permanent Permanent mode of the queue
@@ -193,9 +193,9 @@ class Rabbitmq_client {
             while (count($this->channel->callbacks)) {
                 $this->channel->wait($this->config['allowed_methods'], $this->config['non_blocking'], $this->config['timeout']);
             }
-        } catch(PhpAmqpLib\Exception\AMQPIOException $e) {
-        } catch(RuntimeException $e) {
-        } catch(ErrorException $e) {
+        } catch (Exception $e) {
+            $this->cleanup_connection();
+            throw $e;
         }
         $this->cleanup_connection();
     }
@@ -203,7 +203,7 @@ class Rabbitmq_client {
     /**
      * Lock a message
      *
-     * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     * @author Stéphane Lucien-Vauthier <direction@aslv-consulting.fr>
      *
      * @param PhpAmqpLib\Message\AMQPMessage $message
      */
@@ -215,7 +215,7 @@ class Rabbitmq_client {
     /**
      * Release a message
      *
-     * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     * @author Stéphane Lucien-Vauthier <direction@aslv-consulting.fr>
      *
      * @param PhpAmqpLib\Message\AMQPMessage $message
      */
@@ -228,7 +228,7 @@ class Rabbitmq_client {
      * Delete everything in the selected queue
      *
      * @author Romain GALLIEN <romaingallien.rg@gmail.com>
-     * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     * @author Stéphane Lucien-Vauthier <direction@aslv-consulting.fr>
      *
      * @param  string  $queue to purge
      * @throws
@@ -247,7 +247,7 @@ class Rabbitmq_client {
     /**
      * Close the channel and the connection
      *
-     * @author Stéphane Lucien-Vauthier <s.lucien_vauthier@santiane.fr>
+     * @author Stéphane Lucien-Vauthier <direction@aslv-consulting.fr>
      */
     public function cleanup_connection() {
         try {

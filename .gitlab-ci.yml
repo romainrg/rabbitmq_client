@@ -1,12 +1,12 @@
 image: docker:17.06
 
-services:
-    - name: rabbitmq:3.6-management
-
 stages:
     - test
 
 test-unitary:
+    services:
+        - name: rabbitmq:3.6-management
+        DOCKER_DRIVER: overlay2
     stage: test
     environment: testing
     before_script:
@@ -14,7 +14,18 @@ test-unitary:
         - find . -type f -exec chmod 644 {} +
         - find ./ci -type f -exec chmod 755 {} +
     script:
-        - docker ps
+        - mkdir -v test
+        - cp -pv composer.json test
+        - cp -rpv ci test
+        - docker run --rm --tty --volume -v "$MOUNT_POINT:/app":/app --workdir /app/test composer:1.7 install --ignore-platform-reqs --no-scripts --no-progress
+        - cp -rpv test/vendor/codeigniter/framework/* test
+        - sed -i 's~$config\[\x27composer_autoload\x27\] = FALSE;~$config["composer_autoload"] = FCPATH."vendor/autoload.php";~' test/application/config/config.php
+        - mkdir -p test/vendor/romainrg/rabbitmq_client
+        - cp -rpv libraries test/vendor/romainrg/rabbitmq_client
+        - cp -rpv config test/vendor/romainrg/rabbitmq_client
+        - cp -rpv helpers test/vendor/romainrg/rabbitmq_client
+        - cp -rpv tests/* test
+        - HOST="$(getent hosts rabbitmq | awk '{print $1}')" && docker run --rm --tty -e CI_ENV=testing --add-host rabbitmq:${HOST} --entrypoint="ci/docker_entrypoint_php.sh" --volume $PWD:/app --workdir /app/test php:5.4 php /app/test/index.php unity runComplete
     artifacts:
         when: always
         paths: [test/result_test.html]
