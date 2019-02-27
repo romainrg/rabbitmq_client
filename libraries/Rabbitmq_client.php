@@ -59,6 +59,8 @@ class Rabbitmq_client {
      */
     public function __construct(array $config = array())
     {
+        $this->connexion = null;
+
         // Load the CI instance
         $this->CI =& get_instance();
 
@@ -135,7 +137,9 @@ class Rabbitmq_client {
         }
 
         // Connect to rabbit
-        $this->connect();
+        if ($this->connexion == null) {
+            $this->connect();
+        }
 
         // We declare the queue
         $this->channel->queue_declare($queue, false, $permanent, false, false, false, null, null);
@@ -175,7 +179,9 @@ class Rabbitmq_client {
 
         try {
             // Connect to rabbit
-            $this->connect();
+            if ($this->connexion == null) {
+                $this->connect();
+            }
 
             // Declaring the queue again
             $this->channel->queue_declare($queue, false, $permanent, false, false, false, null, null);
@@ -236,7 +242,9 @@ class Rabbitmq_client {
     public function purge($queue = '')
     {
         // Connect to rabbit
-        $this->connect();
+        if ($this->connexion == null) {
+            $this->connect();
+        }
 
         // Purge queue if exist
         if (!empty($queue)) {
