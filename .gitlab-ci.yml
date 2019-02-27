@@ -5,8 +5,7 @@ stages:
 
 test-unitary:
     services:
-        - name: rabbitmq:3.6-management
-        DOCKER_DRIVER: overlay2
+        - rabbitmq:3.6-management
     stage: test
     environment: testing
     before_script:
